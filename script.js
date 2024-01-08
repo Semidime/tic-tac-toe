@@ -6,12 +6,22 @@ console.log(gameboard.gameArray)
 
 const gameManager = (function () {
 
-    const makeMove = (index, xOrO) => {
+    let currentTurn = "X"
+    const updateCurrentTurn = () => {
+        if (currentTurn === "X") {
+            currentTurn = "O";
+        } else {
+            currentTurn = "X";
+        }
+    }
+    
+    const makeMove = (index) => {
         if (gameboard.gameArray[index]=="") {
-            gameboard.gameArray.splice(index,1,xOrO);   
-            console.log(gameboard.gameArray);
+            gameboard.gameArray.splice(index,1,currentTurn);
+            updateCurrentTurn();
+            console.log(gameboard.gameArray,`${currentTurn} to play`);
         } else if (gameboard.gameArray[index]!="") {
-            console.log("move not available",gameboard.gameArray)
+            console.log("move not available",gameboard.gameArray,`${currentTurn} to play`)
         }
     
         checkWinCondition();
@@ -34,12 +44,16 @@ const gameManager = (function () {
             console.log("WINNER"); 
         } else if (gameboard.gameArray[2] === gameboard.gameArray[4] && gameboard.gameArray[2] === gameboard.gameArray[6] && gameboard.gameArray[2]!="") {
             console.log("WINNER"); 
-        } else return
+        } else if (gameboard.gameArray.includes("")) {
+            return;
+        } else {
+            console.log("TIED")
+        }
     }
-    //MANAGE TURN
-    //MAKE MOVE
-    //CHECK WIN/DRAW CONDITION
+
+    //CHECK TIE CONDITION
     //DECLARE A WINNER
+    //UPDATE PLAYER SCORE
     //RESET BOARD
-    return { makeMove, checkWinCondition }
+    return { currentTurn, makeMove, checkWinCondition }
 })();
