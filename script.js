@@ -1,59 +1,88 @@
-const gameboard = {
-    gameArray: ["","","","","","","","",""],
-}
+const gameboard = (function () {
+    const gameArray = ["","","","","","","","",""];
+   
+    function updateGameArray(index, token) {
+        gameArray.splice(index,1,token)
+        _render();        
+        _checkWinCondition();
+    }
 
-console.log(gameboard.gameArray)
+    function _render() {
+        console.log(`GAMEBOARD: ${gameArray}`);
+        //access DOM module [TO BE ADDED]
+    }
+
+    function _checkWinCondition() {
+        if (gameArray[0] === gameArray[1] && gameArray[0] === gameArray[2] && gameArray[0]!="") {
+            gameManager.announceResult("winner");
+        } else if (gameArray[3] === gameArray[4] && gameArray[3] === gameArray[5] && gameArray[3]!="") {
+            gameManager.announceResult("winner"); 
+        } else if (gameArray[6] === gameArray[7] && gameArray[6] === gameArray[8] && gameArray[6]!="") {
+            gameManager.announceResult("winner");   
+        } else if (gameArray[0] === gameArray[3] && gameArray[0] === gameArray[6] && gameArray[0]!="") {
+            gameManager.announceResult("winner");       
+        } else if (gameArray[1] === gameArray[4] && gameArray[1] === gameArray[7] && gameArray[1]!="") {
+            cgameManager.announceResult("winner"); 
+        } else if (gameArray[2] === gameArray[5] && gameArray[2] === gameArray[8] && gameArray[2]!="") {
+            gameManager.announceResult("winner"); 
+        } else if (gameArray[0] === gameArray[4] && gameArray[0] === gameArray[8] && gameArray[0]!="") {
+            gameManager.announceResult("winner"); 
+        } else if (gameArray[2] === gameArray[4] && gameArray[2] === gameArray[6] && gameArray[2]!="") {
+            gameManager.announceResult("winner"); 
+        } else if (gameArray.includes("")) {
+            return;
+        } else {
+            gameManager.announceResult("tied");
+        }
+    }
+
+    return { updateGameArray }
+})();
 
 const gameManager = (function () {
 
-    let currentTurn = "X"
-    const updateCurrentTurn = () => {
+    let currentTurn = "X";
+    const availableMoves = [0,1,2,3,4,5,6,7,8];
+    let gameState = "ongoing";
+    console.log(`${currentTurn} to play`);
+    
+    function makeMove (moveRef) {
+        if (availableMoves.includes(moveRef)) {
+            availableMoves.splice(availableMoves.indexOf(moveRef),1);
+            console.log(`${currentTurn} played moveRef:${moveRef}`, `Available Moves are ${availableMoves}`);
+            gameboard.updateGameArray(moveRef,currentTurn);
+
+            if (gameState == "ongoing") {
+                _updateCurrentTurn();
+                console.log(`${currentTurn} to play`);
+            }
+
+        } else {
+            console.log(`${currentTurn} tried to play moveRef:${moveRef}. That move is not available`, `Available Moves are ${availableMoves}`);
+        }
+    }
+
+    function _updateCurrentTurn() {
         if (currentTurn === "X") {
             currentTurn = "O";
         } else {
             currentTurn = "X";
         }
     }
-    
-    const makeMove = (index) => {
-        if (gameboard.gameArray[index]=="") {
-            gameboard.gameArray.splice(index,1,currentTurn);
-            updateCurrentTurn();
-            console.log(gameboard.gameArray,`${currentTurn} to play`);
-        } else if (gameboard.gameArray[index]!="") {
-            console.log("move not available",gameboard.gameArray,`${currentTurn} to play`)
-        }
-    
-        checkWinCondition();
-    }
 
-    const checkWinCondition = () => {
-        if (gameboard.gameArray[0] === gameboard.gameArray[1] && gameboard.gameArray[0] === gameboard.gameArray[2] && gameboard.gameArray[0]!="") {
-            console.log("WINNER");
-        } else if (gameboard.gameArray[3] === gameboard.gameArray[4] && gameboard.gameArray[3] === gameboard.gameArray[5] && gameboard.gameArray[3]!="") {
-            console.log("WINNER"); 
-        } else if (gameboard.gameArray[6] === gameboard.gameArray[7] && gameboard.gameArray[6] === gameboard.gameArray[8] && gameboard.gameArray[6]!="") {
-            console.log("WINNER");   
-        } else if (gameboard.gameArray[0] === gameboard.gameArray[3] && gameboard.gameArray[0] === gameboard.gameArray[6] && gameboard.gameArray[0]!="") {
-            console.log("WINNER");       
-        } else if (gameboard.gameArray[1] === gameboard.gameArray[4] && gameboard.gameArray[1] === gameboard.gameArray[7] && gameboard.gameArray[1]!="") {
-            console.log("WINNER"); 
-        } else if (gameboard.gameArray[2] === gameboard.gameArray[5] && gameboard.gameArray[2] === gameboard.gameArray[8] && gameboard.gameArray[2]!="") {
-            console.log("WINNER"); 
-        } else if (gameboard.gameArray[0] === gameboard.gameArray[4] && gameboard.gameArray[0] === gameboard.gameArray[8] && gameboard.gameArray[0]!="") {
-            console.log("WINNER"); 
-        } else if (gameboard.gameArray[2] === gameboard.gameArray[4] && gameboard.gameArray[2] === gameboard.gameArray[6] && gameboard.gameArray[2]!="") {
-            console.log("WINNER"); 
-        } else if (gameboard.gameArray.includes("")) {
-            return;
+    function announceResult(outcome) {
+        if (outcome == "winner") {
+        console.log(`GAME OVER! ${currentTurn} won this round.`);
         } else {
-            console.log("TIED")
-        }
+        console.log("GAME OVER! The round was drawn")
+        }        
+        gameState = "finished";
     }
 
-    //CHECK TIE CONDITION
-    //DECLARE A WINNER
-    //UPDATE PLAYER SCORE
-    //RESET BOARD
-    return { currentTurn, makeMove, checkWinCondition }
+    return { makeMove , announceResult }
 })();
+
+    //makeMove too complicated.  Break into separate functions
+    //CONSIDER if cWC should be in gameboard module or gameManager
+    //ADD PLAYER MODULE AND TRACK SCORES
+    //OFFER TO PLAY ANOTHER ROUND AFTER GAME COMPLETED
