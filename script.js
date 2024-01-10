@@ -22,7 +22,7 @@ const events = {
         });
         }
     }
-    };
+};
 
 const gameboard = (function () {
     const gameArray = ["","","","","","","","",""];
@@ -48,6 +48,8 @@ const gameManager = (function () {
 
     let currentTurn = "X";
     const availableSquares = [0,1,2,3,4,5,6,7,8];
+    let playerX = "Xenophon";
+    let playerO = "Odysseus";
     let gameState = "ongoing";
     events.on("gameArrayChanged",_checkWinCondition);
     console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
@@ -65,7 +67,7 @@ const gameManager = (function () {
 
         } else {
             console.log(`${currentTurn} tried to play moveRef:${moveRef}. That move is not available.`)
-            console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`);
+            console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
         }
     }
 
@@ -102,8 +104,10 @@ const gameManager = (function () {
     }
 
     function _announceResult(outcome) {
-        if (outcome == "winner") {
-        console.log(`GAME OVER! ${currentTurn} won this round.`);
+        if (outcome == "winner" && currentTurn =="X") {
+            console.log(`GAME OVER! ${playerX} won this round.`);
+        } else if ((outcome == "winner" && currentTurn =="O")){
+            console.log(`GAME OVER! ${playerO} won this round.`);
         } else {
         console.log("GAME OVER! The round was drawn")
         }        
@@ -113,7 +117,15 @@ const gameManager = (function () {
     return { makeMove }
 })();
 
-    // makeMove too complicated.  Break into separate functions?
+function createPlayer (name) {
+    let gamesWon = 0;
+
+    const getGamesWon = () => gamesWon;
+    const increaseGamesWon = () => gamesWon++;
+
+    return { name , getGamesWon, increaseGamesWon }
+}
+
     // ADD PLAYER MODULE - new player module
     // ADD SCOREBOARD & TRACK SCORES - gameboard module
     // RESET BOARD TO PLAY ANOTHER ROUND AFTER GAME COMPLETED
