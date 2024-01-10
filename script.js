@@ -24,6 +24,22 @@ const events = {
     }
 };
 
+const players = {
+    
+    playerX: "Xenophon",
+    playerO: "Odysseus",
+    
+    assignPlayer: function(playerName, token) {
+        if(token == "X") {
+            this.playerX = playerName;
+            gameManager.resetGame();
+        } else if (token == "O") {
+            this.playerO = playerName;
+            gameManager.resetGame();
+        }
+    },
+}
+
 //Would be more efficient to include as part of gameManager
 const gameboard = (function () {
     let gameArray = ["","","","","","","","",""];
@@ -54,8 +70,6 @@ const gameManager = (function () {
 
     let currentTurn = "X";
     let availableSquares = [0,1,2,3,4,5,6,7,8];
-    let playerX = "Xenophon";
-    let playerO = "Odysseus";
     events.on("gameArrayChanged",_checkWinCondition);
     console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
     
@@ -107,9 +121,9 @@ const gameManager = (function () {
 
     function _announceResult(outcome) {
         if (outcome == "winner" && currentTurn =="X") {
-            console.log(`GAME OVER! ${playerX} won this round.`);
+            console.log(`GAME OVER! ${players.playerX} won this round.`);
         } else if ((outcome == "winner" && currentTurn =="O")){
-            console.log(`GAME OVER! ${playerO} won this round.`);
+            console.log(`GAME OVER! ${players.playerO} won this round.`);
         } else {
         console.log("GAME OVER! The round was drawn")
         }        
