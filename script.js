@@ -26,12 +26,17 @@ const events = {
 
 //Would be more efficient to include as part of gameManager
 const gameboard = (function () {
-    const gameArray = ["","","","","","","","",""];
+    let gameArray = ["","","","","","","","",""];
    
-    function updateGameArray(index, token) {
+    function updateBoard(index, token) {
         gameArray.splice(index,1,token)
         events.emit("gameArrayChanged", gameArray);  
         _render();              
+    }
+
+    function resetBoard () {
+        gameArray = ["","","","","","","","",""];
+        _render();           
     }
 
     function _render() {
@@ -40,7 +45,7 @@ const gameboard = (function () {
         //could be replaced by subscribing DOM module to gameArrayChanged event
     }
 
-    return { updateGameArray }
+    return { updateBoard, resetBoard }
     // ADD PLAYER NAME DISPLAY
     // ADD SCOREBOARD 
 })();
@@ -48,7 +53,7 @@ const gameboard = (function () {
 const gameManager = (function () {
 
     let currentTurn = "X";
-    const availableSquares = [0,1,2,3,4,5,6,7,8];
+    let availableSquares = [0,1,2,3,4,5,6,7,8];
     let playerX = "Xenophon";
     let playerO = "Odysseus";
     events.on("gameArrayChanged",_checkWinCondition);
@@ -58,7 +63,7 @@ const gameManager = (function () {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
             console.log(`${currentTurn} played moveRef:${moveRef}`, `Available squares are ${availableSquares}`);
-            gameboard.updateGameArray(moveRef,currentTurn);
+            gameboard.updateBoard(moveRef,currentTurn);
 
         } else {
             console.log(`${currentTurn} tried to play moveRef:${moveRef}. That move is not available.`)
@@ -110,17 +115,26 @@ const gameManager = (function () {
         }        
     }
 
-    return { makeMove }
+    function resetGame() {
+        availableSquares = [0,1,2,3,4,5,6,7,8];
+        currentTurn = "X";
+        gameboard.resetBoard();
+        console.log(`New Game. ${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
+    }
+
+    return { makeMove , resetGame }
 })();
 
-function createPlayer (name) {
-    let gamesWon = 0;
 
-    const getGamesWon = () => gamesWon;
-    const increaseGamesWon = () => gamesWon++;
+// function createPlayer (name) {
+//     let gamesWon = 0;
 
-    return { name , getGamesWon, increaseGamesWon }
-}
+//     const getGamesWon = () => gamesWon;
+//     const increaseGamesWon = () => gamesWon++;
+
+//     return { name , getGamesWon, increaseGamesWon }
+// }
+
 
     // ADD PLAYER MODULE - new player module
     // ADD SCOREBOARD & TRACK SCORES - gameboard module
