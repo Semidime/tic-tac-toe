@@ -24,6 +24,7 @@ const events = {
     }
 };
 
+//Would be more efficient to include as part of gameManager
 const gameboard = (function () {
     const gameArray = ["","","","","","","","",""];
    
@@ -50,7 +51,6 @@ const gameManager = (function () {
     const availableSquares = [0,1,2,3,4,5,6,7,8];
     let playerX = "Xenophon";
     let playerO = "Odysseus";
-    let gameState = "ongoing";
     events.on("gameArrayChanged",_checkWinCondition);
     console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
     
@@ -59,11 +59,6 @@ const gameManager = (function () {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
             console.log(`${currentTurn} played moveRef:${moveRef}`, `Available squares are ${availableSquares}`);
             gameboard.updateGameArray(moveRef,currentTurn);
-
-            if (gameState == "ongoing") {
-                _updateCurrentTurn();
-                console.log(`${currentTurn} to play`);
-            }
 
         } else {
             console.log(`${currentTurn} tried to play moveRef:${moveRef}. That move is not available.`)
@@ -89,6 +84,8 @@ const gameManager = (function () {
         } else if (currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6] && currentBoard[2]!="") {
             _announceResult("winner"); 
         } else if (currentBoard.includes("")) {
+            _updateCurrentTurn();
+            console.log(`${currentTurn} to play`);
             return;
         } else {
             _announceResult("tied");
@@ -111,7 +108,6 @@ const gameManager = (function () {
         } else {
         console.log("GAME OVER! The round was drawn")
         }        
-        gameState = "finished";
     }
 
     return { makeMove }
