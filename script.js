@@ -24,23 +24,31 @@ const events = {
     }
 };
 
-const players = {
+const players = (function () {
+    const playerX = "";
+    const playerO = "";
     
-    playerX: "Xenophon",
-    playerO: "Odysseus",
-    
-    assignPlayer: function(playerName, token) {
+    function assignPlayer(playerName, token) {
         if(token == "X") {
-            this.playerX = playerName;
-            gameManager.resetGame();
+            players.playerX = playerName;
         } else if (token == "O") {
-            this.playerO = playerName;
-            gameManager.resetGame();
+            players.playerO = playerName;
         }
-    },
-}
+        const lowerCaseName = playerName.toLowerCase();
+        if (lowerCaseName in players === false) {
+            let gamesWon = 0;
+            const getGamesWon = () => gamesWon;
+            const increaseGamesWon = () => gamesWon++;
+    
+            players[lowerCaseName] = {
+                playerName, getGamesWon , increaseGamesWon 
+            }
+        }
+    };
 
-//Would be more efficient to include as part of gameManager
+    return { playerX , playerO , assignPlayer }
+})()
+
 const gameboard = (function () {
     let gameArray = ["","","","","","","","",""];
    
@@ -71,6 +79,9 @@ const gameManager = (function () {
     let currentTurn = "X";
     let availableSquares = [0,1,2,3,4,5,6,7,8];
     events.on("gameArrayChanged",_checkWinCondition);
+    //default players
+    players.assignPlayer("Xenophon","X");
+    players.assignPlayer("Odysseus","O");
     console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
     
     function makeMove (moveRef) {
@@ -140,18 +151,4 @@ const gameManager = (function () {
 })();
 
 
-// function createPlayer (name) {
-//     let gamesWon = 0;
-
-//     const getGamesWon = () => gamesWon;
-//     const increaseGamesWon = () => gamesWon++;
-
-//     return { name , getGamesWon, increaseGamesWon }
-// }
-
-
-    // ADD PLAYER MODULE - new player module
-    // ADD SCOREBOARD & TRACK SCORES - gameboard module
-    // RESET BOARD TO PLAY ANOTHER ROUND AFTER GAME COMPLETED
-    // ADD DOM MODULE 
 
