@@ -76,16 +76,23 @@ const gameboard = (function () {
 
 const gameManager = (function () {
 
-    let currentTurn = "X";
+    //default start values
     let availableSquares = [0,1,2,3,4,5,6,7,8];
     let currentScoreX = 0;
     let currentScoreO = 0;
-    events.on("gameArrayChanged",_checkWinCondition);
-    //default players
+    let firstMove = "X";
+    let currentTurn = "X";
     players.assignPlayer("Xenophon","X");
     players.assignPlayer("Odysseus","O");
-    console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
+    let currentPlayer = players.playerX;
+    console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}`); 
     
+
+    //Listeners
+    events.on("gameArrayChanged",_checkWinCondition);
+    
+
+    //functions
     function makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
@@ -130,6 +137,7 @@ const gameManager = (function () {
         } else {
             currentTurn = "X";
         }
+        currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
     }
 
     function _processResult(outcome) {
@@ -153,13 +161,16 @@ const gameManager = (function () {
 
     function resetGame() {
         availableSquares = [0,1,2,3,4,5,6,7,8];
-        currentTurn = "X";
+        currentTurn = firstMove === "X" ? "O" : "X";
+        firstMove = currentTurn;
+        currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         gameboard.resetBoard();
-        console.log(`New Game. ${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
+        console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}`); 
     }
 
+    //APIs
     return { makeMove , resetGame }
 })();
 
 
-
+//let currentPLayer = currentTurn === "X" ? players.playerX : players.playerO;
