@@ -96,12 +96,12 @@ const gameManager = (function () {
     function makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
-            console.log(`${currentTurn} played moveRef:${moveRef}`, `Available squares are ${availableSquares}`);
+            console.log(`${currentPlayer} played moveRef:${moveRef}`);
             gameboard.updateBoard(moveRef,currentTurn);
 
         } else {
-            console.log(`${currentTurn} tried to play moveRef:${moveRef}. That move is not available.`)
-            console.log(`${currentTurn} to play.`, `Available squares are ${availableSquares}`); 
+            console.log(`${currentPlayer} tried to play moveRef:${moveRef}. That move is not available.`)
+            console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}.`); 
         }
     }
 
@@ -124,7 +124,7 @@ const gameManager = (function () {
             _processResult("winner"); 
         } else if (currentBoard.includes("")) {
             _updateCurrentTurn();
-            console.log(`${currentTurn} to play`);
+            console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}.`);
             return;
         } else {
             _processResult("tied");
@@ -154,7 +154,7 @@ const gameManager = (function () {
             console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
             console.log(`Total games won by ${players.playerO}: ${players[players.playerO.toLowerCase()].getGamesWon()}`);
         } else {
-        console.log("GAME OVER! The round was drawn")
+        console.log("GAME OVER! The round was drawn.")
         }
         resetGame()        
     }
@@ -165,7 +165,7 @@ const gameManager = (function () {
         firstMove = currentTurn;
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         gameboard.resetBoard();
-        console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}`); 
+        console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}.`); 
     }
 
     //APIs
@@ -173,4 +173,4 @@ const gameManager = (function () {
 })();
 
 
-//let currentPLayer = currentTurn === "X" ? players.playerX : players.playerO;
+
