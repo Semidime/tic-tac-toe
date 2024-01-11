@@ -78,6 +78,8 @@ const gameManager = (function () {
 
     let currentTurn = "X";
     let availableSquares = [0,1,2,3,4,5,6,7,8];
+    let currentScoreX = 0;
+    let currentScoreO = 0;
     events.on("gameArrayChanged",_checkWinCondition);
     //default players
     players.assignPlayer("Xenophon","X");
@@ -98,27 +100,27 @@ const gameManager = (function () {
 
     function _checkWinCondition(currentBoard) {
         if (currentBoard[0] === currentBoard[1] && currentBoard[0] === currentBoard[2] && currentBoard[0]!="") {
-            _announceResult("winner");
+            _processResult("winner");
         } else if (currentBoard[3] === currentBoard[4] && currentBoard[3] === currentBoard[5] && currentBoard[3]!="") {
-            _announceResult("winner"); 
+            _processResult("winner"); 
         } else if (currentBoard[6] === currentBoard[7] && currentBoard[6] === currentBoard[8] && currentBoard[6]!="") {
-            _announceResult("winner");   
+            _processResult("winner");   
         } else if (currentBoard[0] === currentBoard[3] && currentBoard[0] === currentBoard[6] && currentBoard[0]!="") {
-            _announceResult("winner");       
+            _processResult("winner");       
         } else if (currentBoard[1] === currentBoard[4] && currentBoard[1] === currentBoard[7] && currentBoard[1]!="") {
-            _announceResult("winner"); 
+            _processResult("winner"); 
         } else if (currentBoard[2] === currentBoard[5] && currentBoard[2] === currentBoard[8] && currentBoard[2]!="") {
-            _announceResult("winner"); 
+            _processResult("winner"); 
         } else if (currentBoard[0] === currentBoard[4] && currentBoard[0] === currentBoard[8] && currentBoard[0]!="") {
-            _announceResult("winner"); 
+            _processResult("winner"); 
         } else if (currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6] && currentBoard[2]!="") {
-            _announceResult("winner"); 
+            _processResult("winner"); 
         } else if (currentBoard.includes("")) {
             _updateCurrentTurn();
             console.log(`${currentTurn} to play`);
             return;
         } else {
-            _announceResult("tied");
+            _processResult("tied");
         }
     }
     
@@ -130,14 +132,23 @@ const gameManager = (function () {
         }
     }
 
-    function _announceResult(outcome) {
+    function _processResult(outcome) {
         if (outcome == "winner" && currentTurn =="X") {
+            currentScoreX ++;
+            players[players.playerX.toLowerCase()].increaseGamesWon();
             console.log(`GAME OVER! ${players.playerX} won this round.`);
+            console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
+            console.log(`Total games won by ${players.playerX}: ${players[players.playerX.toLowerCase()].getGamesWon()}`);
         } else if ((outcome == "winner" && currentTurn =="O")){
+            currentScoreO ++;
+            players[players.playerO.toLowerCase()].increaseGamesWon();
             console.log(`GAME OVER! ${players.playerO} won this round.`);
+            console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
+            console.log(`Total games won by ${players.playerO}: ${players[players.playerO.toLowerCase()].getGamesWon()}`);
         } else {
         console.log("GAME OVER! The round was drawn")
-        }        
+        }
+        resetGame()        
     }
 
     function resetGame() {
