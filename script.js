@@ -1,4 +1,3 @@
-//PubSub module
 const events = {
     events: {},
     on: function (eventName, fn) {
@@ -44,6 +43,7 @@ const players = (function () {
                 playerName, getGamesWon , increaseGamesWon 
             }
         }
+        events.emit("newPlayerAssigned", "newPlayer")
     };
 
     return { playerX , playerO , assignPlayer }
@@ -65,13 +65,9 @@ const gameboard = (function () {
 
     function _render() {
         console.log(`GAMEBOARD: ${gameArray}`);
-        //access DOM module [TO BE ADDED]
-        //could be replaced by subscribing DOM module to gameArrayChanged event
     }
 
     return { updateBoard, resetBoard }
-    // ADD PLAYER NAME DISPLAY
-    // ADD SCOREBOARD 
 })();
 
 const gameManager = (function () {
@@ -88,8 +84,9 @@ const gameManager = (function () {
     console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}`); 
     
 
-    //Listeners
+    //subscriptions
     events.on("gameArrayChanged",_checkWinCondition);
+    events.on("newPlayerAssigned",_resetGame);
     
 
     //functions
@@ -156,20 +153,25 @@ const gameManager = (function () {
         } else {
         console.log("GAME OVER! The round was drawn.")
         }
-        resetGame()        
+        _resetGame("newRound")        
     }
 
-    function resetGame() {
-        availableSquares = [0,1,2,3,4,5,6,7,8];
-        currentTurn = firstMove === "X" ? "O" : "X";
-        firstMove = currentTurn;
+    function _resetGame(type) {      
+        if (type === "newPlayer") {
+            currentScoreX = 0;
+            currentScoreO = 0;
+            currentTurn = firstMove;
+        } else if (type === "newRound") {
+            currentTurn = firstMove === "X" ? "O" : "X";
+            firstMove = currentTurn;
+        }
+        availableSquares = [0,1,2,3,4,5,6,7,8];       
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         gameboard.resetBoard();
-        console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}.`); 
+        console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}.`);
     }
 
-    //APIs
-    return { makeMove , resetGame }
+    return { makeMove }
 })();
 
 
