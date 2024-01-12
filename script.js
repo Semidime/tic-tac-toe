@@ -93,7 +93,7 @@ const gameManager = (function () {
 
     //subscriptions
     events.on("gameArrayChanged",_checkWinCondition);
-    events.on("newPlayerAssigned",_resetGame);
+    events.on("newPlayerAssigned",resetGame);
     
 
     //functions
@@ -163,18 +163,20 @@ const gameManager = (function () {
             }
         console.log(`GAME OVER! ${currentPlayer} won this round.`); 
         } else {
-        console.log("GAME OVER! The round was drawn.");
-        players[players.playerX.toLowerCase()].increaseGamesPlayed();
-        players[players.playerO.toLowerCase()].increaseGamesPlayed();
+            console.log("GAME OVER! The round was drawn.");
+            players[players.playerX.toLowerCase()].increaseGamesPlayed();
+            players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
-        console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
-        console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
-        console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
-        _resetGame("newRound")        
+    console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
+    console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
+    console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
+    resetGame("newRound")        
     }
 
-    function _resetGame(type) {      
-        if (type === "newPlayer") {
+    function resetGame(type) {      
+        if (type === "resetRound") {
+            currentTurn = firstMove;
+        } else if (type === "newPlayer") {
             currentScoreX = 0;
             currentScoreO = 0;
             currentTurn = firstMove;
@@ -187,8 +189,7 @@ const gameManager = (function () {
         gameboard.resetBoard();
         console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}.`);
     }
-
-    return { makeMove }
+    return { makeMove, resetGame }
 })();
 
 
