@@ -36,11 +36,18 @@ const players = (function () {
         const lowerCaseName = playerName.toLowerCase();
         if (lowerCaseName in players === false) {
             let gamesWon = 0;
+            let gamesPlayed = 0;
+            let netScore = 0;
             const getGamesWon = () => gamesWon;
+            const getGamesPlayed = () => gamesPlayed;
+            const getNetScore = () => netScore;
             const increaseGamesWon = () => gamesWon++;
+            const increaseGamesPlayed = () => gamesPlayed++;
+            const updateNetScore = a => netScore += a;
     
             players[lowerCaseName] = {
-                playerName, getGamesWon , increaseGamesWon 
+                playerName , getGamesWon , getGamesPlayed , getNetScore ,
+                increaseGamesWon , increaseGamesPlayed , updateNetScore
             }
         }
         events.emit("newPlayerAssigned", "newPlayer")
@@ -138,21 +145,31 @@ const gameManager = (function () {
     }
 
     function _processResult(outcome) {
-        if (outcome == "winner" && currentTurn =="X") {
-            currentScoreX ++;
-            players[players.playerX.toLowerCase()].increaseGamesWon();
-            console.log(`GAME OVER! ${players.playerX} won this round.`);
-            console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
-            console.log(`Total games won by ${players.playerX}: ${players[players.playerX.toLowerCase()].getGamesWon()}`);
-        } else if ((outcome == "winner" && currentTurn =="O")){
-            currentScoreO ++;
-            players[players.playerO.toLowerCase()].increaseGamesWon();
-            console.log(`GAME OVER! ${players.playerO} won this round.`);
-            console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
-            console.log(`Total games won by ${players.playerO}: ${players[players.playerO.toLowerCase()].getGamesWon()}`);
+        if (outcome == "winner") {
+            if (currentTurn =="X") {
+                currentScoreX ++;
+                players[players.playerX.toLowerCase()].increaseGamesWon();
+                players[players.playerX.toLowerCase()].increaseGamesPlayed();
+                players[players.playerO.toLowerCase()].increaseGamesPlayed();
+                players[players.playerX.toLowerCase()].updateNetScore(1);
+                players[players.playerO.toLowerCase()].updateNetScore(-1);
+            } else {
+                currentScoreO ++;
+                players[players.playerO.toLowerCase()].increaseGamesWon();
+                players[players.playerO.toLowerCase()].increaseGamesPlayed();
+                players[players.playerX.toLowerCase()].increaseGamesPlayed();
+                players[players.playerO.toLowerCase()].updateNetScore(1);
+                players[players.playerX.toLowerCase()].updateNetScore(-1);
+            }
+        console.log(`GAME OVER! ${currentPlayer} won this round.`); 
         } else {
-        console.log("GAME OVER! The round was drawn.")
+        console.log("GAME OVER! The round was drawn.");
+        players[players.playerX.toLowerCase()].increaseGamesPlayed();
+        players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
+        console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
+        console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
+        console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
         _resetGame("newRound")        
     }
 
