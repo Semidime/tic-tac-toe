@@ -9,27 +9,7 @@
     outline: none;
     /* font-size: 24px; */
     font-family: Raleway, orbitron, sans-serif;
-    background-color: rgb(0, 166, 255);
   }
-  
-.sidebar,
-.game-container,
-.scoreboard,
-.score-X,
-.score-Y,
-.gameboard-container,
-.gameboard,
-.game-square,
-.message-bar,
-.leaderboard-container,
-.button-container,
-.leaderboard {
-    border: red 1px solid;
-    min-height: 1rem;
-    padding: 0.5rem;
-    background-color: white;
-    
-}
 
 .page-container {
     display: grid;
@@ -46,6 +26,7 @@
 }
 
 .logo {
+    background-color: rgb(0, 166, 255);
     border: green 1px dotted;
     display: grid;
     grid-template-columns: 2fr 3fr;
@@ -55,16 +36,22 @@
     justify-items: center;
 }
 .sidebar-logo-img {
+    background-color: rgb(0, 166, 255);
     width: max(80px, 7vw);
     justify-self: center;
     align-self: center;
   }
 
   .sidebar-text {
+  
     font-weight: 800;
     font-size: clamp(1.5rem, 2.5vw, 3rem);
     font-family: Raleway, sans-serif;
     color: white;
+}
+
+.sidebar-text h2 {
+    background-color: rgb(0, 166, 255);
 }
 
 .leaderboard {
@@ -77,21 +64,30 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1.5fr 1.5fr 7fr ;
     min-width: 350px;
+
   }
 
   .game-header {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgb(0, 166, 255);
+    font-size: clamp(1.5rem, 2.5vw, 3rem);
   }
 
-.scoreboard {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    width: 100%;
+.scoreboard-container {
+    display: grid;
     justify-content: center;
+    background-color: rgb(230 230 230);
+}
+
+.scoreboard {
+    width: clamp( 350px, 50vh, 500px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .score-X,
@@ -103,6 +99,9 @@
     flex-direction: column;
     justify-content: center;
     gap: 10px;
+    background-color: whitesmoke;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+    font-size: 2rem;
 }
 
 .player-name,
@@ -114,30 +113,80 @@
 .gameboard-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 9fr 1fr;
+    grid-template-rows: 7fr 1fr 1fr;
     justify-items: center;
+    background-color: rgb(230 230 230);
+    padding: 0.5rem;
 }
 
 .gameboard {
-    height: 50vh;
-    width: 50vh;
+    height: clamp( 350px, 50vh, 500px);
+    width: clamp( 350px, 50vh, 500px);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+    background-color: whitesmoke;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+}
+
+.gameboard>.game-square:nth-of-type(1) {
+    border-right: 2px black solid;
+    border-bottom: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(2) {
+    border-left: 2px black solid;
+    border-right: 2px black solid;
+    border-bottom: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(3) {
+    border-left: 2px black solid;
+    border-bottom: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(4) {
+    border-bottom: 2px black solid;
+    border-right: 2px black solid;
+    border-top: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(5) {
+    border: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(6) {
+    border-bottom: 2px black solid;
+    border-left: 2px black solid;
+    border-top: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(7) {
+    border-right: 2px black solid;
+    border-top: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(8) {
+    border-left: 2px black solid;
+    border-right: 2px black solid;
+    border-top: 2px black solid;
+}
+
+.gameboard>.game-square:nth-of-type(9) {
+    border-left: 2px black solid;
+    border-top: 2px black solid;
 }
 
 .message-bar {
-    height: 5vh;
-    width: 50vh;
-}
-
-.leaderboard-container {
-    /* height: 25vh; */
-    display: flex;
-    flex-direction: row;
+    height: clamp( 35px, 5vh, 50px);
+    width: clamp( 350px, 50vh, 500px);
+    background-color: whitesmoke;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 }
 
 .button-container {
-    height: 5vh;
-    width: 50vh;
+    height: clamp( 35px, 5vh, 50px);
+    width: clamp( 350px, 50vh, 500px);
+    background-color: whitesmoke;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 }
