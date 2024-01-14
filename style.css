@@ -99,14 +99,15 @@
     flex-direction: column;
     justify-content: center;
     gap: 10px;
-    background-color: whitesmoke;
+    background-color: lightgray;
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+    border: black 2px solid;
+    border-radius: 10px;
     font-size: 2rem;
 }
 
 .player-name,
 .player-score {
-    border: green 1px dashed;
     text-align: center;
 }
 
@@ -180,13 +181,25 @@
 .message-bar {
     height: clamp( 35px, 5vh, 50px);
     width: clamp( 350px, 50vh, 500px);
-    background-color: whitesmoke;
+    background-color: lightgray;
+    border: black 2px solid;
+    border-radius: 10px;
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+    padding: 5px;
 }
 
 .button-container {
     height: clamp( 35px, 5vh, 50px);
     width: clamp( 350px, 50vh, 500px);
-    background-color: whitesmoke;
+    display: grid;  
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 10px;
+}
+
+button {
+    background-color: lightgray;
+    border: 2px black solid;
+    border-radius: 10px;
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 }
