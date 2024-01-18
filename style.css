@@ -14,6 +14,7 @@
     display: grid;
     grid-template-rows: 1.5fr 8.5fr;
     height: 100vh;
+    width: 100vw;
 }
 
 .header-section {
@@ -86,7 +87,7 @@
 }
 .score-X,
 .score-Y {
-    width: clamp( 350px, 25vh, 500px);
+    width: clamp(350px, 25vh, 500px);
     height: clamp(100px, 15vh, 250px);
     flex-shrink: 0;
     display: flex;
@@ -106,8 +107,8 @@
 }
 
 .message-bar {
-    height: clamp( 70px, 25vh, 250px);
-    width: clamp( 350px, 25vh, 500px);
+    height: clamp(70px, 25vh, 250px);
+    width: clamp(350px, 25vh, 500px);
     background-color: lightgray;
     border: black 2px solid;
     border-radius: 10px;
@@ -145,8 +146,8 @@
 }
 
 .gameboard {
-    height: clamp( 350px, 90%, 1500px);
-    width: clamp( 350px, 90%, 1500px);
+    height: calc(85vh * .90);
+    width: calc(60vw * .90);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
@@ -200,6 +201,18 @@
 .gameboard>.game-square:nth-of-type(9) {
     border-left: 2px black solid;
     border-top: 2px black solid;
+}
+
+.game-square {
+    min-width: 100px;
+    min-height: 100px;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+}
+
+.game-square span {
+    font-size: min(calc(60vw*.25),calc(85vh*.25));
 }
 
 

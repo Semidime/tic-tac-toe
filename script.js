@@ -61,17 +61,11 @@ const gameboard = (function () {
    
     function updateBoard(index, token) {
         gameArray.splice(index,1,token)
-        events.emit("gameArrayChanged", gameArray);  
-        _render();              
+        events.emit("gameArrayChanged", gameArray);              
     }
 
     function resetBoard () {
         gameArray = ["","","","","","","","",""];
-        _render();           
-    }
-
-    function _render() {
-        console.log(`GAMEBOARD: ${gameArray}`);
     }
 
     return { updateBoard, resetBoard }
@@ -91,7 +85,7 @@ const gameManager = (function () {
     console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}`); 
     
 
-    //subscriptions
+    //subscriptions and listeners
     events.on("gameArrayChanged",_checkWinCondition);
     events.on("newPlayerAssigned",resetGame);
     
@@ -167,7 +161,7 @@ const gameManager = (function () {
             players[players.playerX.toLowerCase()].increaseGamesPlayed();
             players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
-    console.log(`Current score: X:${currentScoreX} | O:${currentScoreO}`);
+    events.emit("scoreChanged", [currentScoreX, currentScoreO] )
     console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
     console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
     resetGame("newRound")        
@@ -189,8 +183,35 @@ const gameManager = (function () {
         gameboard.resetBoard();
         console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}.`);
     }
+
     return { makeMove, resetGame }
 })();
 
+const dOMModule = (function () {
 
+    //subscriptions
+    events.on("gameArrayChanged",_renderGameboard);
+    events.on("scoreChanged",_renderScores);
+    
+    //DOM elements
+    
+
+    //functions
+    function _renderGameboard (currentBoard) {
+        document.getElementById("GS0").innerHTML = `<span>${currentBoard[0]}</span>`;
+        document.getElementById("GS1").innerHTML = `<span>${currentBoard[1]}</span>`;
+        document.getElementById("GS2").innerHTML = `<span>${currentBoard[2]}</span>`;
+        document.getElementById("GS3").innerHTML = `<span>${currentBoard[3]}</span>`;
+        document.getElementById("GS4").innerHTML = `<span>${currentBoard[4]}</span>`;
+        document.getElementById("GS5").innerHTML = `<span>${currentBoard[5]}</span>`;
+        document.getElementById("GS6").innerHTML = `<span>${currentBoard[6]}</span>`;
+        document.getElementById("GS7").innerHTML = `<span>${currentBoard[7]}</span>`;
+        document.getElementById("GS8").innerHTML = `<span>${currentBoard[8]}</span>`;
+    }
+
+    function _renderScores (currentScores) {
+        document.querySelector(".score-X>.player-score").innerHTML = currentScores[0];
+        document.querySelector(".score-Y>.player-score").innerHTML = currentScores[1];
+    }
+})();
 
