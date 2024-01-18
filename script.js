@@ -64,7 +64,7 @@ const gameboard = (function () {
         events.emit("gameArrayChanged", gameArray);              
     }
 
-    function resetBoard () {
+    function resetBoard() {
         gameArray = ["","","","","","","","",""];
     }
 
@@ -85,9 +85,14 @@ const gameManager = (function () {
     console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}`); 
     
 
-    //subscriptions and listeners
+    //subscriptions and event listeners
     events.on("gameArrayChanged",_checkWinCondition);
     events.on("newPlayerAssigned",resetGame);
+    
+    const gameSquares = document.querySelectorAll('.game-square');
+        gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', function(){
+            makeMove(Number(this.id.charAt(2)))
+        }));
     
 
     //functions
