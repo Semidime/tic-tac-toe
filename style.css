@@ -7,31 +7,28 @@
     box-sizing: border-box;
     border: none;
     outline: none;
-    /* font-size: 24px; */
     font-family: Raleway, orbitron, sans-serif;
   }
 
 .page-container {
     display: grid;
     grid-template-columns: 1fr 3fr;
+    height: 100vh;
 }
 
 .sidebar {
     grid-column: 1 / 2;
-    background-color: rgb(0, 166, 255);
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1.5fr 8.5fr;
-    gap: 5px
 }
 
 .logo {
     background-color: rgb(0, 166, 255);
-    border: green 1px dotted;
     display: grid;
     grid-template-columns: 2fr 3fr;
     gap: 10px;
-    padding: 2px;
+    padding: 10px;
     align-items: center;
     justify-items: center;
 }
@@ -54,75 +51,44 @@
     background-color: rgb(0, 166, 255);
 }
 
+.leaderboard-container {
+    background-color: rgb(230 230 230);
+}
+
 .leaderboard {
-    border: green 1px dotted;
-    background-color: rgb(0, 166, 255);
+    height: clamp( 70px, 25vh, 250px);
+    width: clamp( 350px, 25vh, 500px);
+    background-color: lightgray;
+    border: black 2px solid;
+    border-radius: 10px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 }
 .game-container {
-    height: 100vh;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1.5fr 1.5fr 7fr ;
-    min-width: 350px;
-
+    grid-template-rows: 1.5fr 8.5fr;
   }
 
   .game-header {
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
     background-color: rgb(0, 166, 255);
     font-size: clamp(1.5rem, 2.5vw, 3rem);
   }
 
-.scoreboard-container {
+  .gameboard-container {
     display: grid;
-    justify-content: center;
-    background-color: rgb(230 230 230);
-}
-
-.scoreboard {
-    width: clamp( 350px, 50vh, 500px);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-
-.score-X,
-.score-Y {
-    min-width: clamp(150px, 35%, 300px);
-    height: 100%;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    background-color: lightgray;
-    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
-    border: black 2px solid;
-    border-radius: 10px;
-    font-size: 2rem;
-}
-
-.player-name,
-.player-score {
-    text-align: center;
-}
-
-.gameboard-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 7fr 1fr 1fr;
+    grid-template-columns: 3fr 1fr;
     justify-items: center;
+    align-items: center;
     background-color: rgb(230 230 230);
     padding: 0.5rem;
 }
 
 .gameboard {
-    height: clamp( 350px, 50vh, 500px);
-    width: clamp( 350px, 50vh, 500px);
+    height: clamp( 350px, 90%, 1500px);
+    width: clamp( 350px, 90%, 1500px);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
@@ -178,9 +144,48 @@
     border-top: 2px black solid;
 }
 
+.scoreboard-container {
+    display: grid;
+    grid-template-rows: 2fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(230 230 230);
+    padding: 10px;
+}
+
+.scoreboard {
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.score-X,
+.score-Y {
+    width: clamp( 350px, 25vh, 500px);
+    height: clamp(100px, 15vh, 250px);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    background-color: lightgray;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+    border: black 2px solid;
+    border-radius: 10px;
+    font-size: 2rem;
+}
+
+.player-name,
+.player-score {
+    text-align: center;
+}
+
 .message-bar {
-    height: clamp( 35px, 5vh, 50px);
-    width: clamp( 350px, 50vh, 500px);
+    height: clamp( 70px, 25vh, 250px);
+    width: clamp( 350px, 25vh, 500px);
     background-color: lightgray;
     border: black 2px solid;
     border-radius: 10px;
@@ -189,15 +194,15 @@
 }
 
 .button-container {
-    height: clamp( 35px, 5vh, 50px);
-    width: clamp( 350px, 50vh, 500px);
     display: grid;  
-    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 20px;
     padding: 10px;
 }
 
 button {
+    height: 50px;
+    width: clamp( 175px, 12.5vh, 250px);
     background-color: lightgray;
     border: 2px black solid;
     border-radius: 10px;
