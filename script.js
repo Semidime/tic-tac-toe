@@ -58,17 +58,61 @@ const players = (function () {
 
 const gameboard = (function () {
     let gameArray = ["","","","","","","","",""];
+
+    events.on("resetBoard",_resetBoard);
    
     function updateBoard(index, token) {
         gameArray.splice(index,1,token)
         events.emit("gameArrayChanged", gameArray);              
     }
 
-    function resetBoard() {
-        gameArray = ["","","","","","","","",""];
+    function _resetBoard(emptyGameArray) {
+        gameArray = emptyGameArray;
+        console.log(`the gameboard has reset to ${gameArray}!`);
+        console.log(gameArray[0]);
     }
 
-    return { updateBoard, resetBoard }
+    return { updateBoard }
+})();
+
+const dOMModule = (function () {
+
+    //subscriptions
+    events.on("gameArrayChanged",_renderGameboard);
+    events.on("scoreChanged",_renderScores);
+    events.on("resetBoard",_renderGameboard);
+    
+    //DOM elements
+    const GS0 = document.getElementById("GS0");
+    const GS1 = document.getElementById("GS1");
+    const GS2 = document.getElementById("GS2");
+    const GS3 = document.getElementById("GS3");
+    const GS4 = document.getElementById("GS4");
+    const GS5 = document.getElementById("GS5");
+    const GS6 = document.getElementById("GS6");
+    const GS7 = document.getElementById("GS7");
+    const GS8 = document.getElementById("GS8");
+    
+
+    //functions
+    function _renderGameboard (currentBoard) {
+        GS0.innerHTML = `<span>${currentBoard[0]}</span>`;
+        GS1.innerHTML = `<span>${currentBoard[1]}</span>`;
+        GS2.innerHTML = `<span>${currentBoard[2]}</span>`;
+        GS3.innerHTML = `<span>${currentBoard[3]}</span>`;
+        GS4.innerHTML = `<span>${currentBoard[4]}</span>`;
+        GS5.innerHTML = `<span>${currentBoard[5]}</span>`;
+        GS6.innerHTML = `<span>${currentBoard[6]}</span>`;
+        GS7.innerHTML = `<span>${currentBoard[7]}</span>`;
+        GS8.innerHTML = `<span>${currentBoard[8]}</span>`;
+
+        console.log(currentBoard,"SHINY");
+    }
+
+    function _renderScores (currentScores) {
+        document.querySelector(".score-X>.player-score").innerHTML = currentScores[0];
+        document.querySelector(".score-Y>.player-score").innerHTML = currentScores[1];
+    }
 })();
 
 const gameManager = (function () {
@@ -87,7 +131,7 @@ const gameManager = (function () {
 
     //subscriptions and event listeners
     events.on("gameArrayChanged",_checkWinCondition);
-    events.on("newPlayerAssigned",resetGame);
+    events.on("newPlayerAssigned",_resetGame);
     
     const gameSquares = document.querySelectorAll('.game-square');
         gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', function(){
@@ -169,10 +213,11 @@ const gameManager = (function () {
     events.emit("scoreChanged", [currentScoreX, currentScoreO] )
     console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
     console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
-    resetGame("newRound")        
+    _resetGame("newRound");
+
     }
 
-    function resetGame(type) {      
+    function _resetGame(type) {      
         if (type === "resetRound") {
             currentTurn = firstMove;
         } else if (type === "newPlayer") {
@@ -185,38 +230,11 @@ const gameManager = (function () {
         }
         availableSquares = [0,1,2,3,4,5,6,7,8];       
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
-        gameboard.resetBoard();
+        // gameboard.resetBoard();
+        events.emit("resetBoard",["","","","","","","","",""]);
         console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}.`);
     }
 
-    return { makeMove, resetGame }
-})();
-
-const dOMModule = (function () {
-
-    //subscriptions
-    events.on("gameArrayChanged",_renderGameboard);
-    events.on("scoreChanged",_renderScores);
-    
-    //DOM elements
-    
-
-    //functions
-    function _renderGameboard (currentBoard) {
-        document.getElementById("GS0").innerHTML = `<span>${currentBoard[0]}</span>`;
-        document.getElementById("GS1").innerHTML = `<span>${currentBoard[1]}</span>`;
-        document.getElementById("GS2").innerHTML = `<span>${currentBoard[2]}</span>`;
-        document.getElementById("GS3").innerHTML = `<span>${currentBoard[3]}</span>`;
-        document.getElementById("GS4").innerHTML = `<span>${currentBoard[4]}</span>`;
-        document.getElementById("GS5").innerHTML = `<span>${currentBoard[5]}</span>`;
-        document.getElementById("GS6").innerHTML = `<span>${currentBoard[6]}</span>`;
-        document.getElementById("GS7").innerHTML = `<span>${currentBoard[7]}</span>`;
-        document.getElementById("GS8").innerHTML = `<span>${currentBoard[8]}</span>`;
-    }
-
-    function _renderScores (currentScores) {
-        document.querySelector(".score-X>.player-score").innerHTML = currentScores[0];
-        document.querySelector(".score-Y>.player-score").innerHTML = currentScores[1];
-    }
+    return { makeMove }
 })();
 
