@@ -2,8 +2,8 @@
 
 
 * {
-    margin: 0;
-    padding: 0;
+    /* margin: 0;
+    padding: 0; */
     box-sizing: border-box;
     border: none;
     outline: none;
@@ -132,7 +132,7 @@
 }
 
 .new-game-button,
-.player-select-button {
+#openChangePlayerDialogButton {
     height: 50px;
     width: clamp( 175px, 12.5vh, 250px);
     background-color: lightgray;
@@ -237,4 +237,93 @@
     border: black 2px solid;
     border-radius: 10px;
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Dialog styles */
+.modal {
+    padding: 10px;
+    border: 2px black solid;
+    border-radius: 10px;
+    background-color: rgb(245 245 245);
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+}
+
+.form-inputs {
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+flex-grow: 1;
+margin: 5px;
+}
+
+.form-inputs input {
+padding: 0.1rem;
+font-size: 1.5rem;
+width: clamp(150px, 20vw, 400px);
+height: 2rem;
+border: 2px solid #E5E7EB;
+border-radius: 5px;
+}
+
+.form-inputs input[type=radio] {
+width: 1rem;
+height: 1rem;
+padding: 0px;
+margin: 0px;
+}
+
+.form-inputs fieldset {
+display: flex;
+align-items: center;
+justify-content: space-evenly;
+gap: 2px;
+padding: 0.1rem;
+font-size: 1rem;
+width: clamp(150px, 20vw, 400px);
+height: 1rem;
+border: none;
+}
+
+#player-token-radio-group {
+justify-content: start;
+gap: 25px;
+}
+
+.radio-group {
+display: flex;
+align-items: center;
+}
+
+.input-group {
+display: flex;
+flex-direction: row;
+gap: clamp(2vw, 5vw, 100px);
+}
+
+.form-group {
+display: flex;
+flex-direction: column;
+gap: 5px;
+}
+
+.form-submit {
+margin-top: 15px;
+display: flex;
+justify-content: flex-end;
+}
+
+.submit-btn {
+    height: 2rem;
+    font-size: 1.25rem;
+    background-color: lightgray;
+    border: 2px black solid;
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+#closeChangePlayerDialogButton {
+position: absolute;
+right: 10px;
+top: 5px;
 }
