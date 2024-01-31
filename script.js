@@ -144,6 +144,7 @@ const dOMModule = (function () {
 const gameManager = (function () {
 
     //default start values
+
     let availableSquares = [0,1,2,3,4,5,6,7,8];
     let currentScoreX = 0;
     let currentScoreO = 0;
@@ -159,17 +160,26 @@ const gameManager = (function () {
     events.on("checkWinCondition",_checkWinCondition);
     events.on("newPlayerAssigned",_resetGame);
     
-    const gameSquares = document.querySelectorAll('.game-square');
-        gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', function(){
-            makeMove(Number(this.id.charAt(2)))
-        }));
+
 
     document.querySelector('.new-game-button').addEventListener('click', function(){
         _resetGame("newRound")
     });
     
+    const gameSquares = document.querySelectorAll('.game-square');
+    const _gBListeners = function() {
+            makeMove(Number(this.id.charAt(2)))
+    }
+    function _addGameBoardListeners() {
+        gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', _gBListeners));
+    }
+    _addGameBoardListeners();
+    function _removeGameBoardListeners() {
+        gameSquares.forEach(gameSquare => gameSquare.removeEventListener('click', _gBListeners));
+    }
 
     //functions
+
     function makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
@@ -246,6 +256,7 @@ const gameManager = (function () {
             players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
     events.emit("scoreChanged", [currentScoreX, currentScoreO] )
+    _removeGameBoardListeners();
     console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
     console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
    
@@ -267,6 +278,8 @@ const gameManager = (function () {
         availableSquares = [0,1,2,3,4,5,6,7,8];       
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         // gameboard.resetBoard();
+        _removeGameBoardListeners();
+        _addGameBoardListeners();
         events.emit("resetBoard",["","","","","","","","",""]);
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
     }
