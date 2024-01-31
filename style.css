@@ -121,6 +121,7 @@
 .message-body {
     font-family: 'Courier New', Courier, monospace;
     place-self: center;
+    font-size: 1.5rem;
 }
 
 .button-container {
