@@ -38,7 +38,41 @@
                 </div>    
                 <div class="button-container"> 
                     <button class="new-game-button">New Game</button>
-                    <button class="player-select-button">Change player</button>
+
+                    <div class="form-container">
+                        <dialog class="modal">
+                            <button id="closeChangePlayerDialogButton">X</button>
+                            <form action="https://httpbin.org/post" method="post" id="newPlayerForm">
+                                <h1>Add A New Player!</h1>
+                                <div class="form-inputs">
+                                       <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="playerName">Player Name:</label>
+                                                <input type="text" name="playerName" id="playerName" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <div>Select Player Token:</div>
+                                                <fieldset id="player-token-radio-group">
+                                                        <div class="radio-group">
+                                                            <label for="playX">X&nbsp;</label>
+                                                            <input type="radio" name="selectToken" id="playX" value="X" required>
+                                                        </div>
+                                                        <div class="radio-group">
+                                                            <label for="playO">O&nbsp;</label>
+                                                            <input type="radio" name="selectToken" id="playO" value="O">
+                                                        </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="form-submit">
+                                    <button type="submit" class="submit-btn" id="submitBtn">Add Player</button>
+                                </div>
+                            </form>
+                        </dialog>
+                        <button id="openChangePlayerDialogButton">Change Player</button>    
+                    </div>
+
                 </div>
             </div>
             <div class="gameboard-container"> 
