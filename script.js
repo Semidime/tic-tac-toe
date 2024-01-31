@@ -143,8 +143,7 @@ const dOMModule = (function () {
 
 const gameManager = (function () {
 
-    //default start values
-
+    //initialize game
     let availableSquares = [0,1,2,3,4,5,6,7,8];
     let currentScoreX = 0;
     let currentScoreO = 0;
@@ -180,12 +179,9 @@ const gameManager = (function () {
     function makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
-            // console.log(`${currentPlayer} played moveRef:${moveRef}`);
             gameboard.updateBoard(moveRef,currentTurn);
 
         } else {
-            // console.log(`${currentPlayer} tried to play moveRef:${moveRef}. That move is not available.`)
-            // console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}.`); 
             events.emit("publishMessage",`${currentPlayer}, that move is not available. Please try again!`); 
         }
     }
@@ -253,14 +249,9 @@ const gameManager = (function () {
             players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
     events.emit("scoreChanged", [currentScoreX, currentScoreO] )
-    // _removeGameBoardListeners();
     _manageGameBoardListeners("remove");
     console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
     console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
-   
-   
-    // setTimeout(function() { _resetGame("newRound"); }, 10);
-
     }
 
     function _resetGame(type) {      
@@ -275,9 +266,6 @@ const gameManager = (function () {
         }
         availableSquares = [0,1,2,3,4,5,6,7,8];       
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
-        // gameboard.resetBoard();
-        // _removeGameBoardListeners();
-        // _addGameBoardListeners();
         _manageGameBoardListeners("remove");
         _manageGameBoardListeners("add");
         events.emit("resetBoard",["","","","","","","","",""]);
