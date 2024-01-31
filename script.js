@@ -160,23 +160,20 @@ const gameManager = (function () {
     events.on("checkWinCondition",_checkWinCondition);
     events.on("newPlayerAssigned",_resetGame);
     
-
-
     document.querySelector('.new-game-button').addEventListener('click', function(){
         _resetGame("newRound")
     });
     
-    const gameSquares = document.querySelectorAll('.game-square');
-    const _gBListeners = function() {
-            makeMove(Number(this.id.charAt(2)))
+    const _gBListeners = function() {makeMove(Number(this.id.charAt(2)));}       
+    function _manageGameBoardListeners(action) {
+        const gameSquares = document.querySelectorAll('.game-square');
+        if (action === "add") {
+            gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', _gBListeners));
+        } else if (action === "remove") {
+            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('click', _gBListeners));
+        }
     }
-    function _addGameBoardListeners() {
-        gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', _gBListeners));
-    }
-    _addGameBoardListeners();
-    function _removeGameBoardListeners() {
-        gameSquares.forEach(gameSquare => gameSquare.removeEventListener('click', _gBListeners));
-    }
+    _manageGameBoardListeners("add");
 
     //functions
 
@@ -256,7 +253,8 @@ const gameManager = (function () {
             players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
     events.emit("scoreChanged", [currentScoreX, currentScoreO] )
-    _removeGameBoardListeners();
+    // _removeGameBoardListeners();
+    _manageGameBoardListeners("remove");
     console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
     console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
    
@@ -278,8 +276,10 @@ const gameManager = (function () {
         availableSquares = [0,1,2,3,4,5,6,7,8];       
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         // gameboard.resetBoard();
-        _removeGameBoardListeners();
-        _addGameBoardListeners();
+        // _removeGameBoardListeners();
+        // _addGameBoardListeners();
+        _manageGameBoardListeners("remove");
+        _manageGameBoardListeners("add");
         events.emit("resetBoard",["","","","","","","","",""]);
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
     }
