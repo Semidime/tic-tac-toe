@@ -131,8 +131,8 @@
     padding: 10px;
 }
 
-.player-select-button,
-.reset-button {
+.new-game-button,
+.player-select-button {
     height: 50px;
     width: clamp( 175px, 12.5vh, 250px);
     background-color: lightgray;

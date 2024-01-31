@@ -138,6 +138,10 @@ const gameManager = (function () {
         gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', function(){
             makeMove(Number(this.id.charAt(2)))
         }));
+
+    document.querySelector('.new-game-button').addEventListener('click', function(){
+        _resetGame("newRound")
+    });
     
 
     //functions
@@ -206,11 +210,13 @@ const gameManager = (function () {
                 players[players.playerO.toLowerCase()].updateNetScore(1);
                 players[players.playerX.toLowerCase()].updateNetScore(-1);
             }
-            console.log(`GAME OVER! ${currentPlayer} won this round.`); 
-            setTimeout(function() { alert(`GAME OVER! ${currentPlayer} won this round.`); }, 10);
+            console.log(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); 
+            events.emit("publishMessage",`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`);
+            setTimeout(function() { alert(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); }, 10);
         } else {
-            console.log("GAME OVER! The round was drawn.");
-            setTimeout(function() { alert("GAME OVER! The round was drawn."); }, 10);
+            console.log(`GAME OVER! The round was drawn. Click "New Game" to play again.`);
+            events.emit("publishMessage",`GAME OVER! The round was drawn. Click "New Game" to play again.`);
+            setTimeout(function() { alert(`GAME OVER! The round was drawn. Click "New Game" to play again.`); }, 10);
             players[players.playerX.toLowerCase()].increaseGamesPlayed();
             players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
@@ -219,14 +225,12 @@ const gameManager = (function () {
     console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
    
    
-    setTimeout(function() { _resetGame("newRound"); }, 10);
+    // setTimeout(function() { _resetGame("newRound"); }, 10);
 
     }
 
     function _resetGame(type) {      
-        if (type === "resetRound") {
-            currentTurn = firstMove;
-        } else if (type === "newPlayer") {
+        if (type === "newPlayer") {
             currentScoreX = 0;
             currentScoreO = 0;
             currentTurn = firstMove;
