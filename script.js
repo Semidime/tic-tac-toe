@@ -63,13 +63,12 @@ const gameboard = (function () {
    
     function updateBoard(index, token) {
         gameArray.splice(index,1,token)
-        events.emit("gameArrayChanged", gameArray);              
+        events.emit("gameArrayChanged", gameArray);  
+        events.emit("checkWinCondition", gameArray);            
     }
 
     function _resetBoard(emptyGameArray) {
         gameArray = emptyGameArray;
-        console.log(`the gameboard has reset to ${gameArray}!`);
-        console.log(gameArray[0]);
     }
 
     return { updateBoard }
@@ -81,6 +80,7 @@ const dOMModule = (function () {
     events.on("gameArrayChanged",_renderGameboard);
     events.on("scoreChanged",_renderScores);
     events.on("resetBoard",_renderGameboard);
+    events.on("publishMessage",_renderMessage)
     
     //DOM elements
     const GS0 = document.getElementById("GS0");
@@ -93,7 +93,6 @@ const dOMModule = (function () {
     const GS7 = document.getElementById("GS7");
     const GS8 = document.getElementById("GS8");
     
-
     //functions
     function _renderGameboard (currentBoard) {
         GS0.innerHTML = `<span>${currentBoard[0]}</span>`;
@@ -105,13 +104,15 @@ const dOMModule = (function () {
         GS6.innerHTML = `<span>${currentBoard[6]}</span>`;
         GS7.innerHTML = `<span>${currentBoard[7]}</span>`;
         GS8.innerHTML = `<span>${currentBoard[8]}</span>`;
-
-        console.log(currentBoard,"SHINY");
     }
 
     function _renderScores (currentScores) {
         document.querySelector(".score-X>.player-score").innerHTML = currentScores[0];
         document.querySelector(".score-Y>.player-score").innerHTML = currentScores[1];
+    }
+
+    function _renderMessage(messageText) {
+        document.querySelector(".message-body").innerHTML = messageText;
     }
 })();
 
@@ -126,11 +127,11 @@ const gameManager = (function () {
     players.assignPlayer("Xenophon","X");
     players.assignPlayer("Odysseus","O");
     let currentPlayer = players.playerX;
-    console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}`); 
+    events.emit("publishMessage",`New Game. ${currentPlayer} to play.`); 
     
 
     //subscriptions and event listeners
-    events.on("gameArrayChanged",_checkWinCondition);
+    events.on("checkWinCondition",_checkWinCondition);
     events.on("newPlayerAssigned",_resetGame);
     
     const gameSquares = document.querySelectorAll('.game-square');
@@ -143,12 +144,13 @@ const gameManager = (function () {
     function makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
-            console.log(`${currentPlayer} played moveRef:${moveRef}`);
+            // console.log(`${currentPlayer} played moveRef:${moveRef}`);
             gameboard.updateBoard(moveRef,currentTurn);
 
         } else {
-            console.log(`${currentPlayer} tried to play moveRef:${moveRef}. That move is not available.`)
-            console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}.`); 
+            // console.log(`${currentPlayer} tried to play moveRef:${moveRef}. That move is not available.`)
+            // console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}.`); 
+            events.emit("publishMessage",`${currentPlayer}, that move is not available. Please try again!`); 
         }
     }
 
@@ -171,7 +173,7 @@ const gameManager = (function () {
             _processResult("winner"); 
         } else if (currentBoard.includes("")) {
             _updateCurrentTurn();
-            console.log(`${currentPlayer} to play.`, `Available squares are ${availableSquares}.`);
+            events.emit("publishMessage",`${currentPlayer} to play.`);
             return;
         } else {
             _processResult("tied");
@@ -204,16 +206,20 @@ const gameManager = (function () {
                 players[players.playerO.toLowerCase()].updateNetScore(1);
                 players[players.playerX.toLowerCase()].updateNetScore(-1);
             }
-        console.log(`GAME OVER! ${currentPlayer} won this round.`); 
+            console.log(`GAME OVER! ${currentPlayer} won this round.`); 
+            setTimeout(function() { alert(`GAME OVER! ${currentPlayer} won this round.`); }, 10);
         } else {
             console.log("GAME OVER! The round was drawn.");
+            setTimeout(function() { alert("GAME OVER! The round was drawn."); }, 10);
             players[players.playerX.toLowerCase()].increaseGamesPlayed();
             players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
     events.emit("scoreChanged", [currentScoreX, currentScoreO] )
     console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
     console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
-    _resetGame("newRound");
+   
+   
+    setTimeout(function() { _resetGame("newRound"); }, 10);
 
     }
 
@@ -232,7 +238,7 @@ const gameManager = (function () {
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         // gameboard.resetBoard();
         events.emit("resetBoard",["","","","","","","","",""]);
-        console.log(`New Game. ${currentPlayer} to play.`, `Available squares are ${availableSquares}.`);
+        events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
     }
 
     return { makeMove }
