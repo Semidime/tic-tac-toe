@@ -26,6 +26,24 @@ const events = {
 const players = (function () {
     const playerX = "";
     const playerO = "";
+
+    // EVENT LISTENERS
+    document.getElementById("openChangePlayerDialogButton").addEventListener('click', function() {
+        document.querySelector(".modal").showModal();
+    });
+
+    document.getElementById("closeChangePlayerDialogButton").addEventListener('click', function() {
+        document.getElementById("newPlayerForm").reset();
+        document.querySelector(".modal").close();
+    });
+
+    newPlayerForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        assignPlayer(playerName.value,newPlayerForm.elements["selectToken"].value);
+        document.getElementById("newPlayerForm").reset();
+        document.querySelector(".modal").close();
+      }) 
+
     
     function assignPlayer(playerName, token) {
         if(token == "X") {
@@ -50,7 +68,8 @@ const players = (function () {
                 increaseGamesWon , increaseGamesPlayed , updateNetScore
             }
         }
-        events.emit("newPlayerAssigned", "newPlayer")
+        events.emit("newPlayerAssigned", "newPlayer");
+        events.emit("publishPlayers",[`${players.playerX} (X)`,`${players.playerO} (O)`]);
     };
 
     return { playerX , playerO , assignPlayer }
@@ -80,7 +99,8 @@ const dOMModule = (function () {
     events.on("gameArrayChanged",_renderGameboard);
     events.on("scoreChanged",_renderScores);
     events.on("resetBoard",_renderGameboard);
-    events.on("publishMessage",_renderMessage)
+    events.on("publishMessage",_renderMessage);
+    events.on("publishPlayers",_publishPlayers)
     
     //DOM elements
     const GS0 = document.getElementById("GS0");
@@ -113,6 +133,11 @@ const dOMModule = (function () {
 
     function _renderMessage(messageText) {
         document.querySelector(".message-body").innerHTML = messageText;
+    }
+
+    function _publishPlayers(currentPlayers) {
+        document.querySelector(".score-X>.player-name").innerHTML = currentPlayers[0];
+        document.querySelector(".score-Y>.player-name").innerHTML = currentPlayers[1];
     }
 })();
 
@@ -234,6 +259,7 @@ const gameManager = (function () {
             currentScoreX = 0;
             currentScoreO = 0;
             currentTurn = firstMove;
+            events.emit("scoreChanged", [currentScoreX, currentScoreO] )
         } else if (type === "newRound") {
             currentTurn = firstMove === "X" ? "O" : "X";
             firstMove = currentTurn;
