@@ -64,14 +64,18 @@
     grid-template-columns: 1fr 3fr 1fr;
     justify-items: center;
     align-items: center;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
     background-color: rgb(230 230 230);
 }
 
 .scoreboard-container {
     display: grid;
-    grid-template-rows: 2fr 1fr 1fr;
-    justify-content: center;
-    align-items: center;
+    grid-template-rows: 2fr 2fr 1fr;
+    height: 100%;
+    width: 100%;
+    justify-content:center;
+    align-items: start;
     background-color: rgb(230 230 230);
     padding: 10px;
 }
@@ -79,11 +83,11 @@
 .scoreboard {
 
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    height: 100%;
+    width: 100%;
     justify-content: center;
+    align-content: start;
     gap: 20px;
-    margin-bottom: 10px;
-    margin-top: 10px;
 }
 .score-X,
 .score-Y {
@@ -104,10 +108,11 @@
 .player-name,
 .player-score {
     text-align: center;
+    font-weight: bold;
 }
 
 .message-bar {
-    height: clamp(70px, 25vh, 250px);
+    height: 75%;
     width: clamp(350px, 25vh, 500px);
     background-color: lightgray;
     border: black 2px solid;
@@ -116,20 +121,27 @@
     padding: 5px;
     display: grid;
     grid-template-rows: 1fr 5fr;
+    margin-top: 40px;
 }
 
 .message-body {
     font-family: 'Courier New', Courier, monospace;
-    place-self: center;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.message-title {
+    font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
 }
 
 .button-container {
+    padding-top: 25px;
     display: grid;  
     grid-template-rows: 1fr 1fr;
     justify-content: center;
     gap: 20px;
-    padding: 10px;
+    font-size: 1.5rem;
 }
 
 .new-game-button,
@@ -140,6 +152,7 @@
     border: 2px black solid;
     border-radius: 10px;
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+    font-size: 1.25rem;
 }
 
 .gameboard-container {
@@ -150,12 +163,11 @@
     justify-items: center;
     align-items: center;
     background-color: rgb(230 230 230);
-    padding: 0.5rem;
 }
 
 .gameboard {
-    height: calc(85vh * .90);
-    width: calc(60vw * .90);
+    height: 100%;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
@@ -227,19 +239,67 @@
 .leaderboard-container {
     background-color: rgb(230 230 230);
     display: grid;
-    align-content: center;
-    justify-content: center;
+    height: 100%;
+    width: 100%;
+    align-content: start;
+    justify-content: stretch;
+    padding-left: 50px;
+    padding-right: 50px;
+    
 }
 
-.leaderboard {
-    height: clamp( 70px, 75vh, 800px);
-    width: clamp( 350px, 25vh, 500px);
-    background-color: lightgray;
-    border: black 2px solid;
-    border-radius: 10px;
-    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+table {
+/* border-collapse: collapse; */
+letter-spacing: 1px;
+font-size: 1rem;
+box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+border: 2px solid rgb(200,200,200);
+border-radius: 10px;
 }
 
+td, th {
+border: 1px solid rgb(190,190,190);
+padding: 10px 20px;
+text-align: center;
+}
+
+th {
+background-color: rgb(230,230,230);
+}
+
+tr:nth-child(even) td {
+background-color: rgb(250,250,250);
+}
+
+tr:nth-child(odd) td {
+background-color: rgb(240,240,240);
+}
+
+tr th:nth-child(2),
+tr td:nth-child(2) {
+    text-align: left;
+}
+
+thead tr:first-child th:first-child {
+border: 2px solid green;
+border-top-left-radius: 10px;
+} 
+
+thead tr:first-child th:last-child {
+border: 2px solid green;
+border-top-right-radius: 10px;
+} 
+
+tfoot tr:last-child td:last-child {
+border: 2px solid rgb(200,200,200);
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
+}
+
+#tableFooter {
+text-align: center;
+background-color: rgb(230,230,230);
+}
 
 /* Dialog styles */
 .modal {
