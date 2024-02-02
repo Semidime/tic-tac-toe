@@ -58,7 +58,7 @@
     align-items: center;
     padding:20px 20vw 10px 40px;
     background-color: rgb(0, 166, 255);
-    font-size: clamp(1.5rem, 2.5vw, 3rem);
+    font-size: clamp(1.25rem, 4vh, 3rem);
 }
 
 .tiki-fraud {
