@@ -100,7 +100,9 @@ const dOMModule = (function () {
     events.on("scoreChanged",_renderScores);
     events.on("resetBoard",_renderGameboard);
     events.on("publishMessage",_renderMessage);
-    events.on("publishPlayers",_publishPlayers)
+    events.on("publishPlayers",_publishPlayers);
+    events.on("gSEnter",_showAvailability);
+    events.on("gSLeave",_hideAvailability);
     
     //DOM elements
     const GS0 = document.getElementById("GS0");
@@ -140,6 +142,20 @@ const dOMModule = (function () {
         document.querySelector(".score-X>.player-name").innerHTML = currentPlayers[0];
         document.querySelector(".score-Y>.player-name").innerHTML = currentPlayers[1];
         _renderLeaderBoard();
+    }
+
+    function _showAvailability(gSArr) {
+        gSID = `GS${gSArr[1]}`
+                if (gSArr[0] === 1) {
+        document.getElementById(`${gSID}`).style["backgroundColor"] = "rgba(142, 231, 119, 0.25)"
+        } else {
+        document.getElementById(`${gSID}`).style["backgroundColor"] = "rgba(255, 0, 0, 0.7)"
+        }
+    }
+
+    function _hideAvailability(gSRef) {
+        gSID = `GS${gSRef}`
+        document.getElementById(`${gSID}`).style["backgroundColor"] = "whitesmoke"
     }
 
     function _renderLeaderBoard() {
@@ -188,13 +204,31 @@ const gameManager = (function () {
         _resetGame("newRound")
     });
     
-    const _gBListeners = function() {makeMove(Number(this.id.charAt(2)));}       
+
+    const _gBListener = function() {makeMove(Number(this.id.charAt(2)))};
+    
+    const _gBListenerEnter = function() {
+        const gSRef = Number(this.id.charAt(2))
+        if (availableSquares.includes(gSRef)) {
+            events.emit("gSEnter",[1,gSRef]);
+        } else {
+            events.emit("gSEnter",[0,gSRef]);
+        };
+    }
+    
+    const _gBListenerLeave = function() {events.emit("gSLeave",(Number(this.id.charAt(2))))};          
+    
     function _manageGameBoardListeners(action) {
         const gameSquares = document.querySelectorAll('.game-square');
         if (action === "add") {
-            gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', _gBListeners));
+            gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', _gBListener));
+            gameSquares.forEach(gameSquare => gameSquare.addEventListener('mouseenter', _gBListenerEnter));
+            gameSquares.forEach(gameSquare => gameSquare.addEventListener('mouseleave', _gBListenerLeave));
+
         } else if (action === "remove") {
-            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('click', _gBListeners));
+            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('click', _gBListener));
+            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('mouseenter', _gBListenerEnter));
+            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('mouseleave', _gBListenerLeave));
         }
     }
     _manageGameBoardListeners("add");
