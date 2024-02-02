@@ -246,6 +246,14 @@
     font-size: min(calc(60vw*.25),calc(85vh*.25));
 }
 
+.game-square .available {
+    background-color: rgba(142, 231, 119, 0.25);
+}
+
+.game-square .unavailable {
+    background-color: rgba(255, 0, 0, 0.7);
+}
+
 .leaderboard-container {
     background-color: rgb(230 230 230);
     display: grid;

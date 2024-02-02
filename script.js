@@ -103,6 +103,7 @@ const dOMModule = (function () {
     events.on("publishPlayers",_publishPlayers);
     events.on("gSEnter",_showAvailability);
     events.on("gSLeave",_hideAvailability);
+    events.on("highlightWin",_highlightWin);
     
     //DOM elements
     const GS0 = document.getElementById("GS0");
@@ -145,17 +146,25 @@ const dOMModule = (function () {
     }
 
     function _showAvailability(gSArr) {
-        gSID = `GS${gSArr[1]}`
                 if (gSArr[0] === 1) {
-        document.getElementById(`${gSID}`).style["backgroundColor"] = "rgba(142, 231, 119, 0.25)"
+        // document.getElementById(`GS${gSArr[1]}`).style["backgroundColor"] = "rgba(142, 231, 119, 0.25)";
+        document.getElementById(`GS${gSArr[1]}`).classList.add('available');
         } else {
-        document.getElementById(`${gSID}`).style["backgroundColor"] = "rgba(255, 0, 0, 0.7)"
+        // document.getElementById(`GS${gSArr[1]}`).style["backgroundColor"] = "rgba(255, 0, 0, 0.7)";
+        document.getElementById(`GS${gSArr[1]}`).classList.add('unavailable');
         }
     }
 
     function _hideAvailability(gSRef) {
-        gSID = `GS${gSRef}`
-        document.getElementById(`${gSID}`).style["backgroundColor"] = "whitesmoke"
+        // document.getElementById(`GS${gSRef}`).style["backgroundColor"] = "whitesmoke";
+        document.getElementById(`GS${gSRef}`).classList.remove('available', 'unavailable');
+    }
+
+    function _highlightWin(winArr) {
+        console.log(winArr);
+        document.getElementById(`GS${winArr[0]}`).style["backgroundColor"] = "whitesmoke";
+        document.getElementById(`GS${winArr[1]}`).style["backgroundColor"] = "whitesmoke";
+        document.getElementById(`GS${winArr[2]}`).style["backgroundColor"] = "whitesmoke";
     }
 
     function _renderLeaderBoard() {
@@ -247,21 +256,21 @@ const gameManager = (function () {
 
     function _checkWinCondition(currentBoard) {
         if (currentBoard[0] === currentBoard[1] && currentBoard[0] === currentBoard[2] && currentBoard[0]!="") {
-            _processResult("winner");
+            _processResult(["winner",0,1,2]);
         } else if (currentBoard[3] === currentBoard[4] && currentBoard[3] === currentBoard[5] && currentBoard[3]!="") {
-            _processResult("winner"); 
+            _processResult(["winner",3,4,5]); 
         } else if (currentBoard[6] === currentBoard[7] && currentBoard[6] === currentBoard[8] && currentBoard[6]!="") {
-            _processResult("winner");   
+            _processResult(["winner",6,7,8]);   
         } else if (currentBoard[0] === currentBoard[3] && currentBoard[0] === currentBoard[6] && currentBoard[0]!="") {
-            _processResult("winner");       
+            _processResult(["winner",0,3,6]);       
         } else if (currentBoard[1] === currentBoard[4] && currentBoard[1] === currentBoard[7] && currentBoard[1]!="") {
-            _processResult("winner"); 
+            _processResult(["winner",1,4,7]); 
         } else if (currentBoard[2] === currentBoard[5] && currentBoard[2] === currentBoard[8] && currentBoard[2]!="") {
-            _processResult("winner"); 
+            _processResult(["winner",2,5,8]); 
         } else if (currentBoard[0] === currentBoard[4] && currentBoard[0] === currentBoard[8] && currentBoard[0]!="") {
-            _processResult("winner"); 
+            _processResult(["winner",0,4,8]); 
         } else if (currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6] && currentBoard[2]!="") {
-            _processResult("winner"); 
+            _processResult(["winner",2,4,6]); 
         } else if (currentBoard.includes("")) {
             _updateCurrentTurn();
             events.emit("publishMessage",`${currentPlayer} to play.`);
@@ -281,7 +290,7 @@ const gameManager = (function () {
     }
 
     function _processResult(outcome) {
-        if (outcome == "winner") {
+        if (outcome[0] == "winner") {
             if (currentTurn =="X") {
                 currentScoreX ++;
                 players[players.playerX.toLowerCase()].increaseGamesWon();
@@ -297,20 +306,21 @@ const gameManager = (function () {
                 players[players.playerO.toLowerCase()].updateNetScore(1);
                 players[players.playerX.toLowerCase()].updateNetScore(-1);
             }
-            console.log(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); 
+            // console.log(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); 
             events.emit("publishMessage",`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`);
-            setTimeout(function() { alert(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); }, 10);
+            // setTimeout(function() { alert(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); }, 10);
         } else {
-            console.log(`GAME OVER! The round was drawn. Click "New Game" to play again.`);
+            // console.log(`GAME OVER! The round was drawn. Click "New Game" to play again.`);
             events.emit("publishMessage",`GAME OVER! The round was drawn. Click "New Game" to play again.`);
-            setTimeout(function() { alert(`GAME OVER! The round was drawn. Click "New Game" to play again.`); }, 10);
+            // setTimeout(function() { alert(`GAME OVER! The round was drawn. Click "New Game" to play again.`); }, 10);
             players[players.playerX.toLowerCase()].increaseGamesPlayed();
             players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
-    events.emit("scoreChanged", [currentScoreX, currentScoreO] )
+    events.emit("scoreChanged", [currentScoreX, currentScoreO] );
+    events.emit("highlightWin",[outcome[1],outcome[2],outcome[3]]);
     _manageGameBoardListeners("remove");
-    console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
-    console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
+    // console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
+    // console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
     }
 
     function _resetGame(type) {      
