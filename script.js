@@ -104,6 +104,7 @@ const dOMModule = (function () {
     events.on("gSEnter",_showAvailability);
     events.on("gSLeave",_hideAvailability);
     events.on("highlightWin",_highlightWin);
+    events.on("resetBoard",_removeWinHighlight);
     
     //DOM elements
     const GS0 = document.getElementById("GS0");
@@ -146,26 +147,27 @@ const dOMModule = (function () {
     }
 
     function _showAvailability(gSArr) {
-                if (gSArr[0] === 1) {
-        // document.getElementById(`GS${gSArr[1]}`).style["backgroundColor"] = "rgba(142, 231, 119, 0.25)";
-        document.getElementById(`GS${gSArr[1]}`).classList.add('available');
+        if (gSArr[0] === 1) {
+            document.getElementById(`GS${gSArr[1]}`).classList.add('available');
         } else {
-        // document.getElementById(`GS${gSArr[1]}`).style["backgroundColor"] = "rgba(255, 0, 0, 0.7)";
-        document.getElementById(`GS${gSArr[1]}`).classList.add('unavailable');
+            document.getElementById(`GS${gSArr[1]}`).classList.add('unavailable');
         }
     }
 
     function _hideAvailability(gSRef) {
-        // document.getElementById(`GS${gSRef}`).style["backgroundColor"] = "whitesmoke";
         document.getElementById(`GS${gSRef}`).classList.remove('available', 'unavailable');
     }
 
     function _highlightWin(winArr) {
-        console.log(winArr);
-        document.getElementById(`GS${winArr[0]}`).style["backgroundColor"] = "whitesmoke";
-        document.getElementById(`GS${winArr[1]}`).style["backgroundColor"] = "whitesmoke";
-        document.getElementById(`GS${winArr[2]}`).style["backgroundColor"] = "whitesmoke";
+        document.getElementById(`GS${winArr[0]}`).classList.add('win');
+        document.getElementById(`GS${winArr[1]}`).classList.add('win');
+        document.getElementById(`GS${winArr[2]}`).classList.add('win');
     }
+
+    function _removeWinHighlight() {
+        const winSquares = document.querySelectorAll('.win');
+        winSquares.forEach(winSquare => winSquare.classList.remove('win'));
+    };
 
     function _renderLeaderBoard() {
         const leaderBoardRows = Object.keys(players).slice(3).length;
@@ -214,7 +216,7 @@ const gameManager = (function () {
     });
     
 
-    const _gBListener = function() {makeMove(Number(this.id.charAt(2)))};
+    const _gBListenerMove = function() {makeMove(Number(this.id.charAt(2)))};
     
     const _gBListenerEnter = function() {
         const gSRef = Number(this.id.charAt(2))
@@ -223,21 +225,21 @@ const gameManager = (function () {
         } else {
             events.emit("gSEnter",[0,gSRef]);
         };
-    }
+    }  
     
-    const _gBListenerLeave = function() {events.emit("gSLeave",(Number(this.id.charAt(2))))};          
+    const _gBListenerLeave = function() {events.emit("gSLeave",(Number(this.id.charAt(2))))};           
     
     function _manageGameBoardListeners(action) {
         const gameSquares = document.querySelectorAll('.game-square');
         if (action === "add") {
-            gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', _gBListener));
-            gameSquares.forEach(gameSquare => gameSquare.addEventListener('mouseenter', _gBListenerEnter));
-            gameSquares.forEach(gameSquare => gameSquare.addEventListener('mouseleave', _gBListenerLeave));
+            gameSquares.forEach(gameSquare => gameSquare.addEventListener('click', _gBListenerMove));
+            gameSquares.forEach(gameSquare => gameSquare.addEventListener('mouseenter', _gBListenerEnter)); 
+            gameSquares.forEach(gameSquare => gameSquare.addEventListener('mouseleave', _gBListenerLeave)); 
 
         } else if (action === "remove") {
-            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('click', _gBListener));
-            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('mouseenter', _gBListenerEnter));
-            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('mouseleave', _gBListenerLeave));
+            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('click', _gBListenerMove));
+            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('mouseenter', _gBListenerEnter)); 
+            gameSquares.forEach(gameSquare => gameSquare.removeEventListener('mouseleave', _gBListenerLeave)); 
         }
     }
     _manageGameBoardListeners("add");
