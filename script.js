@@ -180,7 +180,7 @@ const dOMModule = (function () {
         const sortedPlayerDataArray = playerDataArray.toSorted(function(a, b) {
             if (a[1] == b[1]) {
               if(a[2] == 0 || b[2] == 0) {
-                return 0
+                return b[2] - a[2];
                 } else {
                 return a[2] - b[2];
                 }
