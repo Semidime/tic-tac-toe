@@ -166,7 +166,7 @@ const dOMModule = (function () {
 
     function _removeWinHighlight() {
         const winSquares = document.querySelectorAll('.win');
-        winSquares.forEach(winSquare => winSquare.classList.remove('win'));
+        winSquares.forEach(winSquare => winSquare.classList.remove('win', 'available'));
     };
 
     function _renderLeaderBoard() {
