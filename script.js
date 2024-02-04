@@ -170,26 +170,36 @@ const dOMModule = (function () {
     };
 
     function _renderLeaderBoard() {
-        const leaderBoardRows = Object.keys(players).slice(3).length;
-        const playerNameArray = Object.keys(players).slice(3);
         const tableBody = document.getElementById("leaderboardTable").getElementsByTagName("tbody")[0];
+        const leaderBoardRows = Object.keys(players).slice(3).length;
+        const playerArray = Object.keys(players).slice(3);
+        const playerDataArray = [];      
+        for (let i = 0;  i < leaderBoardRows; i++) {
+            playerDataArray.push([players[playerArray[i]].playerName,players[playerArray[i]].getGamesWon(),players[playerArray[i]].getGamesPlayed()])
+        }       
+        const sortedPlayerDataArray = playerDataArray.toSorted(function(a, b) {
+            if (a[1] == b[1]) {
+              if(a[2] == 0 || b[2] == 0) {
+                return 0
+                } else {
+                return a[2] - b[2];
+                }
+            }
+            return b[1] - a[1];
+          });
 
         tableBody.innerHTML = ""; //clears current rows from tableBody
         
-        for (let i = 0;  i < leaderBoardRows; i++) {
-            currentWins = players[playerNameArray[i]].getGamesWon();
-            currentPlayed = players[playerNameArray[i]].getGamesPlayed();
-            
-
+        for (let i = 0;  i < leaderBoardRows; i++) {           
             let newRow = tableBody.insertRow(-1);
             let c0 = newRow.insertCell(0);
             let c1 = newRow.insertCell(1);
             let c2 = newRow.insertCell(2);
 
             c0.innerHTML = i+1;
-            c1.innerHTML = players[playerNameArray[i]].playerName;
-            c2.innerHTML = `${currentWins} / ${currentPlayed}`
-        }
+            c1.innerHTML = sortedPlayerDataArray[i][0];
+            c2.innerHTML = `${sortedPlayerDataArray[i][1]} / ${sortedPlayerDataArray[i][2]}`
+        } 
     }
 })();
 
