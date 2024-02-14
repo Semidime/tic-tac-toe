@@ -157,15 +157,52 @@
 
 .new-game-button,
 #openChangePlayerDialogButton {
-    height: 50px;
-    width: clamp( 175px, 12.5vh, 250px);
+    height: 75px;
+    width: clamp( 200px, 15vh, 300px);
     background-color: lightgray;
     border: 2px black solid;
     border-radius: 10px;
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
-    font-size: 1.25rem;
+    font-size: 1.4rem;
 }
 
+.new-game-button span,
+#openChangePlayerDialogButton span {
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.new-game-button span:after,
+#openChangePlayerDialogButton span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.new-game-button:hover span,
+#openChangePlayerDialogButton:hover span {
+    padding-right: 25px;
+}
+
+.new-game-button:hover span:after,
+#openChangePlayerDialogButton:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.new-game-button:hover,
+#openChangePlayerDialogButton:hover  {
+    transform: translateY(-1px);
+}
+
+.new-game-button:active,
+#openChangePlayerDialogButton:active  {
+    transform: translateY(2px);
+}
 .gameboard-container {
     height: 100%;
     width: 100%;
@@ -341,44 +378,7 @@ tfoot tr:last-child td:last-child {
     justify-content: space-evenly;
     flex-grow: 1;
     margin: 5px;
-}
-
-.form-inputs input {
-    padding: 0.1rem;
-    font-size: 1.5rem;
-    width: clamp(150px, 20vw, 400px);
-    height: 2rem;
-    border: 2px solid #E5E7EB;
-    border-radius: 5px;
-}
-
-.form-inputs input[type=radio] {
-    width: 1rem;
-    height: 1rem;
-    padding: 0px;
-    margin: 0px;
-}
-
-.form-inputs fieldset {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    gap: 2px;
-    padding: 0.1rem;
-    font-size: 1rem;
-    width: clamp(150px, 20vw, 400px);
-    height: 1rem;
-    border: none;
-}
-
-#player-token-radio-group {
-    justify-content: start;
-    gap: 25px;
-}
-
-.radio-group {
-    display: flex;
-    align-items: center;
+    padding-top: 10px;
 }
 
 .input-group {
@@ -390,7 +390,44 @@ tfoot tr:last-child td:last-child {
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 2rem;
+}
+
+.form-inputs input {
+    padding: 0.5rem;
+    width: clamp(150px, 20vw, 400px);
+    height: 3rem;
+    border: 2px solid #E5E7EB;
+    border-radius: 5px;
+}
+
+.form-inputs fieldset {
+    display: flex;
+    gap: 2px;
+    padding-bottom: 0.5rem;
+    width: clamp(150px, 20vw, 400px);
+    border: none;
+    font-weight: bold;
+}
+
+.form-inputs input[type=radio] {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0px;
+    margin: 0px;
+}
+
+
+#player-token-radio-group {
+    justify-content: start;
+    gap: 25px;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
 }
 
 .form-submit {
@@ -400,16 +437,38 @@ tfoot tr:last-child td:last-child {
 }
 
 .submit-btn {
-    height: 2rem;
-    font-size: 1.25rem;
+    height: 3rem;
+    width: 200px;
+    font-size: 1.5rem;
     background-color: lightgray;
     border: 2px black solid;
     border-radius: 5px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
 }
 
+.submit-btn:hover {
+    transform: translateY(-1px);
+}
+
+.submit-btn:active {
+    transform: translateY(2px);
+}
+
 #closeChangePlayerDialogButton {
     position: absolute;
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 2rem;
     right: 10px;
     top: 5px;
+    border: 2px black solid;
+    border-radius: 5px;
+}
+
+#closeChangePlayerDialogButton:hover {
+    transform: translateY(-1px);
+}
+
+#closeChangePlayerDialogButton:active {
+    transform: translateY(2px);
 }
