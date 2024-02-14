@@ -283,12 +283,12 @@ const gameManager = (function () {
             _processResult(["winner",0,4,8]); 
         } else if (currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6] && currentBoard[2]!="") {
             _processResult(["winner",2,4,6]); 
-        } else if (currentBoard.includes("")) {
+        } else if (currentBoard.includes("") == false) {
+            _processResult("tied");            
+        } else {
             _updateCurrentTurn();
             events.emit("publishMessage",`${currentPlayer} to play.`);
             return;
-        } else {
-            _processResult("tied");
         }
     }
     
@@ -306,33 +306,23 @@ const gameManager = (function () {
             if (currentTurn =="X") {
                 currentScoreX ++;
                 players[players.playerX.toLowerCase()].increaseGamesWon();
-                players[players.playerX.toLowerCase()].increaseGamesPlayed();
-                players[players.playerO.toLowerCase()].increaseGamesPlayed();
-                players[players.playerX.toLowerCase()].updateNetScore(1);
-                players[players.playerO.toLowerCase()].updateNetScore(-1);
+                // players[players.playerX.toLowerCase()].updateNetScore(1);
+                // players[players.playerO.toLowerCase()].updateNetScore(-1);
             } else {
                 currentScoreO ++;
                 players[players.playerO.toLowerCase()].increaseGamesWon();
-                players[players.playerO.toLowerCase()].increaseGamesPlayed();
-                players[players.playerX.toLowerCase()].increaseGamesPlayed();
-                players[players.playerO.toLowerCase()].updateNetScore(1);
-                players[players.playerX.toLowerCase()].updateNetScore(-1);
+                // players[players.playerO.toLowerCase()].updateNetScore(1);
+                // players[players.playerX.toLowerCase()].updateNetScore(-1);
             }
-            // console.log(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); 
             events.emit("publishMessage",`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`);
-            // setTimeout(function() { alert(`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`); }, 10);
+            events.emit("highlightWin",[outcome[1],outcome[2],outcome[3]]);
         } else {
-            // console.log(`GAME OVER! The round was drawn. Click "New Game" to play again.`);
             events.emit("publishMessage",`GAME OVER! The round was drawn. Click "New Game" to play again.`);
-            // setTimeout(function() { alert(`GAME OVER! The round was drawn. Click "New Game" to play again.`); }, 10);
-            players[players.playerX.toLowerCase()].increaseGamesPlayed();
-            players[players.playerO.toLowerCase()].increaseGamesPlayed();
         }
-    events.emit("scoreChanged", [currentScoreX, currentScoreO] );
-    events.emit("highlightWin",[outcome[1],outcome[2],outcome[3]]);
+        players[players.playerX.toLowerCase()].increaseGamesPlayed();
+        players[players.playerO.toLowerCase()].increaseGamesPlayed();
+        events.emit("scoreChanged", [currentScoreX, currentScoreO] );
     _manageGameBoardListeners("remove");
-    // console.log(`${players.playerX}'s net score is: ${players[players.playerX.toLowerCase()].getNetScore()}. (${players[players.playerX.toLowerCase()].getGamesWon()} wins from ${players[players.playerX.toLowerCase()].getGamesPlayed()} games.)`);
-    // console.log(`${players.playerO}'s net score is: ${players[players.playerO.toLowerCase()].getNetScore()}. (${players[players.playerO.toLowerCase()].getGamesWon()} wins from ${players[players.playerO.toLowerCase()].getGamesPlayed()} games.)`);
     }
 
     function _resetGame(type) {      
