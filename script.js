@@ -105,6 +105,7 @@ const dOMModule = (function () {
     events.on("gSLeave",_hideAvailability);
     events.on("highlightWin",_highlightWin);
     events.on("resetBoard",_removeWinHighlight);
+    events.on("removeAvailableClass",_removeAvailableClass);
     
     //DOM elements
     const GS0 = document.getElementById("GS0");
@@ -167,6 +168,11 @@ const dOMModule = (function () {
     function _removeWinHighlight() {
         const winSquares = document.querySelectorAll('.win');
         winSquares.forEach(winSquare => winSquare.classList.remove('win', 'available'));
+    };
+
+    function _removeAvailableClass() {
+        const gameSquares = document.querySelectorAll('.game-square');
+        gameSquares.forEach(gameSquare => gameSquare.classList.remove('available', 'unavailable'));
     };
 
     function _renderLeaderBoard() {
@@ -312,13 +318,12 @@ const gameManager = (function () {
             events.emit("highlightWin",[outcome[1],outcome[2],outcome[3]]);
             events.emit("publishMessage",`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`);
         } else {
+            events.emit("removeAvailableClass");
             events.emit("publishMessage",`GAME OVER! The round was drawn. Click "New Game" to play again.`);
-
         }
     players[players.playerX.toLowerCase()].increaseGamesPlayed();
     players[players.playerO.toLowerCase()].increaseGamesPlayed();    
-    events.emit("scoreChanged", [currentScoreX, currentScoreO] );
-    events.emit("removeAvailabilityTags");
+    events.emit("scoreChanged", [currentScoreX, currentScoreO] ); 
     _manageGameBoardListeners("remove");
     }
 
