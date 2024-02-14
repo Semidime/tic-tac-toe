@@ -55,17 +55,12 @@ const players = (function () {
         if (lowerCaseName in players === false) {
             let gamesWon = 0;
             let gamesPlayed = 0;
-            let netScore = 0;
             const getGamesWon = () => gamesWon;
             const getGamesPlayed = () => gamesPlayed;
-            const getNetScore = () => netScore;
             const increaseGamesWon = () => gamesWon++;
             const increaseGamesPlayed = () => gamesPlayed++;
-            const updateNetScore = a => netScore += a;
-    
             players[lowerCaseName] = {
-                playerName , getGamesWon , getGamesPlayed , getNetScore ,
-                increaseGamesWon , increaseGamesPlayed , updateNetScore
+                playerName , getGamesWon , getGamesPlayed , increaseGamesWon , increaseGamesPlayed 
             }
         }
         events.emit("newPlayerAssigned", "newPlayer");
