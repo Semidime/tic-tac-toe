@@ -155,9 +155,10 @@ const dOMModule = (function () {
     }
 
     function _highlightWin(winArr) {
-        document.getElementById(`GS${winArr[0]}`).classList.add('win');
-        document.getElementById(`GS${winArr[1]}`).classList.add('win');
-        document.getElementById(`GS${winArr[2]}`).classList.add('win');
+        winArrLength = winArr.length;
+        for (let i = 0; i < winArrLength; i ++) {
+            document.getElementById(`GS${winArr[i]}`).classList.add('win');
+        }
     }
 
     function _removeWinHighlight() {
@@ -268,24 +269,19 @@ const gameManager = (function () {
     }
 
     function _checkWinCondition(currentBoard) {
-        if (currentBoard[0] === currentBoard[1] && currentBoard[0] === currentBoard[2] && currentBoard[0]!="") {
-            _processResult(["winner",0,1,2]);
-        } else if (currentBoard[3] === currentBoard[4] && currentBoard[3] === currentBoard[5] && currentBoard[3]!="") {
-            _processResult(["winner",3,4,5]); 
-        } else if (currentBoard[6] === currentBoard[7] && currentBoard[6] === currentBoard[8] && currentBoard[6]!="") {
-            _processResult(["winner",6,7,8]);   
-        } else if (currentBoard[0] === currentBoard[3] && currentBoard[0] === currentBoard[6] && currentBoard[0]!="") {
-            _processResult(["winner",0,3,6]);       
-        } else if (currentBoard[1] === currentBoard[4] && currentBoard[1] === currentBoard[7] && currentBoard[1]!="") {
-            _processResult(["winner",1,4,7]); 
-        } else if (currentBoard[2] === currentBoard[5] && currentBoard[2] === currentBoard[8] && currentBoard[2]!="") {
-            _processResult(["winner",2,5,8]); 
-        } else if (currentBoard[0] === currentBoard[4] && currentBoard[0] === currentBoard[8] && currentBoard[0]!="") {
-            _processResult(["winner",0,4,8]); 
-        } else if (currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6] && currentBoard[2]!="") {
-            _processResult(["winner",2,4,6]); 
-        } else if (currentBoard.includes("") == false) {
-            _processResult("tied");            
+        const winArr = [];
+        if (currentBoard[0] === currentBoard[1] && currentBoard[0] === currentBoard[2] && currentBoard[0]!="") {winArr.push(0,1,2)}; 
+        if (currentBoard[3] === currentBoard[4] && currentBoard[3] === currentBoard[5] && currentBoard[3]!="") {winArr.push(3,4,5)};
+        if (currentBoard[6] === currentBoard[7] && currentBoard[6] === currentBoard[8] && currentBoard[6]!="") {winArr.push(6,7,8)};
+        if (currentBoard[0] === currentBoard[3] && currentBoard[0] === currentBoard[6] && currentBoard[0]!="") {winArr.push(0,3,6)};
+        if (currentBoard[1] === currentBoard[4] && currentBoard[1] === currentBoard[7] && currentBoard[1]!="") {winArr.push(1,4,7)};
+        if (currentBoard[2] === currentBoard[5] && currentBoard[2] === currentBoard[8] && currentBoard[2]!="") {winArr.push(2,5,8)};
+        if (currentBoard[0] === currentBoard[4] && currentBoard[0] === currentBoard[8] && currentBoard[0]!="") {winArr.push(0,4,8)};
+        if (currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6] && currentBoard[2]!="") {winArr.push(2,4,6)};
+        if (winArr.length == 0 && currentBoard.includes("") == false) {
+            _processResult("tied");
+        } else if (winArr.length > 0) {
+            _processResult(winArr); 
         } else {
             _updateCurrentTurn();
             events.emit("publishMessage",`${currentPlayer} to play.`);
@@ -302,7 +298,9 @@ const gameManager = (function () {
     }
 
     function _processResult(outcome) {
-        if (outcome[0] == "winner") {
+        if (outcome == "tied") {
+            events.emit("publishMessage",`GAME OVER! The round was drawn. Click "New Game" to play again.`);
+        } else {
             if (currentTurn =="X") {
                 currentScoreX ++;
                 players[players.playerX.toLowerCase()].increaseGamesWon();
@@ -310,12 +308,10 @@ const gameManager = (function () {
                 currentScoreO ++;
                 players[players.playerO.toLowerCase()].increaseGamesWon();
             }
-            events.emit("highlightWin",[outcome[1],outcome[2],outcome[3]]);
+            events.emit("highlightWin",outcome);
             events.emit("publishMessage",`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`);
-        } else {
-            events.emit("removeAvailableClass");
-            events.emit("publishMessage",`GAME OVER! The round was drawn. Click "New Game" to play again.`);
         }
+    events.emit("removeAvailableClass");
     players[players.playerX.toLowerCase()].increaseGamesPlayed();
     players[players.playerO.toLowerCase()].increaseGamesPlayed();    
     events.emit("scoreChanged", [currentScoreX, currentScoreO] ); 
@@ -339,7 +335,5 @@ const gameManager = (function () {
         events.emit("resetBoard",["","","","","","","","",""]);
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
     }
-
-    // return { makeMove }
 })();
 
