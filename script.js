@@ -288,7 +288,6 @@ const gameManager = (function () {
         } else {
             _updateCurrentTurn();
             events.emit("publishMessage",`${currentPlayer} to play.`);
-            return;
         }
     }
     
@@ -306,22 +305,20 @@ const gameManager = (function () {
             if (currentTurn =="X") {
                 currentScoreX ++;
                 players[players.playerX.toLowerCase()].increaseGamesWon();
-                // players[players.playerX.toLowerCase()].updateNetScore(1);
-                // players[players.playerO.toLowerCase()].updateNetScore(-1);
             } else {
                 currentScoreO ++;
                 players[players.playerO.toLowerCase()].increaseGamesWon();
-                // players[players.playerO.toLowerCase()].updateNetScore(1);
-                // players[players.playerX.toLowerCase()].updateNetScore(-1);
             }
-            events.emit("publishMessage",`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`);
             events.emit("highlightWin",[outcome[1],outcome[2],outcome[3]]);
+            events.emit("publishMessage",`GAME OVER! ${currentPlayer} won this round. Click "New Game" to play again.`);
         } else {
             events.emit("publishMessage",`GAME OVER! The round was drawn. Click "New Game" to play again.`);
+
         }
-        players[players.playerX.toLowerCase()].increaseGamesPlayed();
-        players[players.playerO.toLowerCase()].increaseGamesPlayed();
-        events.emit("scoreChanged", [currentScoreX, currentScoreO] );
+    players[players.playerX.toLowerCase()].increaseGamesPlayed();
+    players[players.playerO.toLowerCase()].increaseGamesPlayed();    
+    events.emit("scoreChanged", [currentScoreX, currentScoreO] );
+    events.emit("removeAvailabilityTags");
     _manageGameBoardListeners("remove");
     }
 
