@@ -227,7 +227,7 @@ const gameManager = (function () {
     });
     
 
-    const _gBListenerMove = function() {makeMove(Number(this.id.charAt(2)))};
+    const _gBListenerMove = function() {_makeMove(Number(this.id.charAt(2)))};
     
     const _gBListenerEnter = function() {
         const gSRef = Number(this.id.charAt(2))
@@ -257,7 +257,7 @@ const gameManager = (function () {
 
     //functions
 
-    function makeMove (moveRef) {
+    function _makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
             gameboard.updateBoard(moveRef,currentTurn);
@@ -340,6 +340,6 @@ const gameManager = (function () {
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
     }
 
-    return { makeMove }
+    // return { makeMove }
 })();
 
