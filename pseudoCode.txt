@@ -1,0 +1,59 @@
+Add drop down to change player to select existing player. (sort alphabetical)
+Add toggle button for bot players (option on each scoreboard to use tacticBot or erraticBot(RNG))
+
+________________________
+tacticBot
+
+tacticBot moves first (P1): 
+
+    A: CORNER OPENING
+        - _makemove(RNG - any corner).  
+            - if P2 takes middle, makeMove(diagonally opposite opening move)
+                - proceed to _winBlockRNG(). Should result in a tie. 
+            - if P2 takes diagonally opposite corner, proceed to _winBlockRNG().  Should result in a tie.
+            - if P2 takes an adj corner (i.e. not diagonally opposite from opening move). _makeMove(nonMC adj to opening move, but not adjacent to P2's move).  
+                - proceed to _winBlockRNG(). Should result in P1 win. 
+            - if P2 takes a nonMC, proceed to _winBlockRNG().  Should result in P1 win.
+        
+
+    B: MIDDLE OPENING
+        - proceed to _winBlockRNG().  Should result in a tie. 
+
+
+    C: NMC OPENING
+        - _makeMOve(RNG - any nonMC)
+            - proceed to _winBlockRNG().  Should result in a tie.
+
+tacticBot moves second (P2):
+    
+    - if P1 first move = middle 
+        - proceed to _winBlockRNG().  Should result in a tie.
+
+    - if P1 first move = any corner
+        i.  80% of the time.  makeMove(diagonally opposite)
+            - proceed to winBlockRNG();  Should result in a tie.
+        ii. 20% of the time. makeMove(middle);
+            - if P1 next move is diagonally opposite P1's first move, _makeMove(RNG - nonMC)
+                - proceed to _winBlockRNG(). Should result in a tie.
+            - else, proceed to _winBlockRNG().  Should result in a tie. 
+    
+    - if P1 first move = nonMC
+        - proceed to _winBlockRNG().  Should result in a tie.
+
+
+_____________________________
+_winBlockRNG()
+- assess each available square to check if move will result in a win condition.  
+    - if yes _makeMove() to win
+    - if no, check for potential lose condition on next move
+        - if yes _makeMove() to block
+        - if no, is middle available?
+            - if yes, _makeMove() middle
+            - if no, are any corners available?
+                - if yes_makeMove()
+                    - i. RNG any corner not adjacent to an opponent square
+                    - ii. RNG any other corner
+                - if no, makeMove(RNG any available nonMC).
+
+
+
