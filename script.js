@@ -209,6 +209,7 @@ const gameManager = (function () {
 
     //initialize game
     let availableSquares = [0,1,2,3,4,5,6,7,8];
+    let moveSequence = [];
     let currentScoreX = 0;
     let currentScoreO = 0;
     let firstMove = "X";
@@ -261,6 +262,9 @@ const gameManager = (function () {
     function _makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
+            moveSequence.push(moveRef);
+            console.log(availableSquares);
+            console.log(moveSequence);
             gameboard.updateBoard(moveRef,currentTurn);
 
         } else {
@@ -328,6 +332,7 @@ const gameManager = (function () {
             currentTurn = firstMove === "X" ? "O" : "X";
         }
         availableSquares = [0,1,2,3,4,5,6,7,8];
+        moveSequence = [];
         firstMove = currentTurn;
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         _manageGameBoardListeners("remove");
