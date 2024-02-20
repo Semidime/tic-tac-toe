@@ -155,8 +155,8 @@ const dOMModule = (function () {
     }
 
     function _highlightWin(winArr) {
-        winArrLength = winArr.length;
-        for (let i = 0; i < winArrLength; i ++) {
+        // winArrLength = winArr.length;
+        for (let i = 0; i < winArr.length; i ++) {
             document.getElementById(`GS${winArr[i]}`).classList.add('win');
         }
     }
