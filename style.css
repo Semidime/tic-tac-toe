@@ -114,6 +114,7 @@
     font-size: 1rem;
     display: grid;
     grid-template-rows: 1fr 1fr;
+    padding: 0 10px 0 10px;
 }
 
 .bot-inputs {
@@ -126,8 +127,10 @@
     grid-template-columns: 2fr 1fr 6fr;
 }
 
-#difficulty-slider-text {
+#x-difficulty-text,
+#o-difficulty-text {
     grid-column-start: 3;
+    padding-left: 10px;
 }
 
 .message-bar {

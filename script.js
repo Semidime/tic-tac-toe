@@ -217,6 +217,10 @@ const gameManager = (function () {
     players.assignPlayer("Xenophon","X");
     players.assignPlayer("Odysseus","O");
     let currentPlayer = players.playerX;
+    let xBot = 0;
+    let xBotDifficulty = 2;
+    let oBot = 0;
+    let oBotDifficulty = 2;
     events.emit("publishMessage",`New Game. ${currentPlayer} to play.`); 
     
 
@@ -227,7 +231,7 @@ const gameManager = (function () {
     document.querySelector('.new-game-button').addEventListener('click', function(){
         _resetGame("newRound")
     });
-    
+   
 
     const _gBListenerMove = function() {makeMove(Number(this.id.charAt(2)))};
     
@@ -256,6 +260,48 @@ const gameManager = (function () {
         }
     }
     _manageGameBoardListeners("add");
+
+    //bot controls
+    const xBotCheckbox = document.getElementById("xBotCheckbox");
+    const oBotCheckbox = document.getElementById("oBotCheckbox");
+    const xBotDifficultySlider = document.getElementById("xBotDifficulty");
+    const oBotDifficultySlider = document.getElementById("oBotDifficulty");
+    const xBotDifficultyText = document.getElementById("x-difficulty-text");
+    const oBotDifficultyText = document.getElementById("o-difficulty-text");
+    xBotCheckbox.oninput = function () {
+        if (xBot == 0) { xBot = 1 } else {xBot = 0};
+        if (currentPlayer == players.playerX && xBot == 1) {
+            compPlayer.tacTicBot();
+        }    
+    };
+    oBotCheckbox.oninput = function () {
+        if (oBot == 0) {oBot = 1} else {oBot = 0};
+        if (currentPlayer == players.playerO && oBot == 1) {
+            compPlayer.tacTicBot();
+        }
+    };
+    xBotDifficultySlider.oninput = function () {
+        xBotDifficulty = xBotDifficultySlider.value;
+        if (xBotDifficulty == 1) {
+            xBotDifficultyText.textContent = "Difficulty: easy"
+        } else if (xBotDifficulty == 2) {
+            xBotDifficultyText.textContent = "Difficulty: normal"
+        } else if (xBotDifficulty == 3) {
+            xBotDifficultyText.textContent = "Difficulty: hard"
+        }
+        console.log(xBotDifficulty);
+    };
+    oBotDifficultySlider.oninput = function () {
+        oBotDifficulty = oBotDifficultySlider.value;
+        if (oBotDifficulty == 1) {
+            oBotDifficultyText.textContent = "Difficulty: easy"
+        } else if (oBotDifficulty == 2) {
+            oBotDifficultyText.textContent = "Difficulty: normal"
+        } else if (oBotDifficulty == 3) {
+            oBotDifficultyText.textContent = "Difficulty: hard"
+        }
+        console.log(oBotDifficulty);
+    };
 
     //functions
 
@@ -299,10 +345,11 @@ const gameManager = (function () {
         }
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         
-        if(currentPlayer == players.playerO) {
+        if (currentPlayer == players.playerX && xBot == 1) {
+            compPlayer.tacTicBot();
+        } else if (currentPlayer == players.playerO && oBot == 1) {
             compPlayer.tacTicBot();
         }
-
     }
 
     function _processResult(outcome) {
@@ -343,7 +390,9 @@ const gameManager = (function () {
         events.emit("resetBoard",["","","","","","","","",""]);
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
 
-        if(currentPlayer == players.playerO) {
+        if (currentPlayer == players.playerX && xBot == 1) {
+            compPlayer.tacTicBot();
+        } else if (currentPlayer == players.playerO && oBot == 1) {
             compPlayer.tacTicBot();
         }
     }
