@@ -1,28 +1,25 @@
 Add drop down to change player to select existing player. (sort alphabetical)
-Add toggle button for bot players (option on each scoreboard to use tacticBot or erraticBot(RNG))
+Add toggle button for bot players (option on each scoreboard to use tacticBot - set difficulty slider.  X% chance of RNG)
 
 ________________________
 tacticBot
 
 tacticBot moves first (P1): 
 
-    A: CORNER OPENING
-        - _makemove(RNG - any corner).  
-            - if P2 takes middle, makeMove(diagonally opposite opening move)
-                - proceed to _winBlockRNG(). Should result in a tie. 
-            - if P2 takes diagonally opposite corner, proceed to _winBlockRNG().  Should result in a tie.
-            - if P2 takes an adj corner (i.e. not diagonally opposite from opening move). _makeMove(nonMC adj to opening move, but not adjacent to P2's move).  
-                - proceed to _winBlockRNG(). Should result in P1 win. 
-            - if P2 takes a nonMC, proceed to _winBlockRNG().  Should result in P1 win.
+    - _makemove(RNG - middle or any corner).  
+        - if P2 takes middle, makeMove(diagonally opposite opening move)
+            - then proceed to _winBlockRNG(). 
+        Should result in a tie. 
+
+        - if P2 takes diagonally opposite corner, proceed to _winBlockRNG().  
+        Should result in a tie.
         
+        - if P2 takes an adj corner (i.e. first move was corner, and Opp takes corner that is not diagonally opposite from opening move), proceed to _winBlockRNG(). 
+        Should result in P1 win. 
 
-    B: MIDDLE OPENING
-        - proceed to _winBlockRNG().  Should result in a tie. 
-
-
-    C: NMC OPENING
-        - _makeMOve(RNG - any nonMC)
-            - proceed to _winBlockRNG().  Should result in a tie.
+        - if P2 takes a crux GS, proceed to _winBlockRNG().  
+        Should result in P1 win.
+        
 
 tacticBot moves second (P2):
     
@@ -30,14 +27,10 @@ tacticBot moves second (P2):
         - proceed to _winBlockRNG().  Should result in a tie.
 
     - if P1 first move = any corner
-        i.  80% of the time.  makeMove(diagonally opposite)
+        - makeMove(diagonally opposite)
             - proceed to winBlockRNG();  Should result in a tie.
-        ii. 20% of the time. makeMove(middle);
-            - if P1 next move is diagonally opposite P1's first move, _makeMove(RNG - nonMC)
-                - proceed to _winBlockRNG(). Should result in a tie.
-            - else, proceed to _winBlockRNG().  Should result in a tie. 
     
-    - if P1 first move = nonMC
+    - if P1 first move = crux
         - proceed to _winBlockRNG().  Should result in a tie.
 
 
@@ -49,11 +42,11 @@ _winBlockRNG()
         - if yes _makeMove() to block
         - if no, is middle available?
             - if yes, _makeMove() middle
-            - if no, are any corners available?
-                - if yes_makeMove()
-                    - i. RNG any corner not adjacent to an opponent square
-                    - ii. RNG any other corner
-                - if no, makeMove(RNG any available nonMC).
+            - if no, are any corners available not adjacent to an opponent square?
+                - if yes_makeMove()   
+                - if no, does tTB have the middle and are any crux GS available opposite available squares
+                    -if yes makeMove
+                    - if no RNG any available square.
 
 
 
