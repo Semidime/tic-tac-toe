@@ -208,8 +208,8 @@ const dOMModule = (function () {
 const gameManager = (function () {
 
     //initialize game
-    let availableSquares = [0,1,2,3,4,5,6,7,8];
-    let moveSequence = [];
+    const availableSquares = [];
+    const moveSequence = [];
     let currentScoreX = 0;
     let currentScoreO = 0;
     let firstMove = "X";
@@ -331,17 +331,25 @@ const gameManager = (function () {
         } else if (type === "newRound") {
             currentTurn = firstMove === "X" ? "O" : "X";
         }
-        availableSquares = [0,1,2,3,4,5,6,7,8];
-        moveSequence = [];
-        console.log(`aS:${availableSquares}`);
-        console.log(`mS:${moveSequence}`);
         firstMove = currentTurn;
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
+        _initializeGameArrays();
         _manageGameBoardListeners("remove");
         _manageGameBoardListeners("add");
         events.emit("resetBoard",["","","","","","","","",""]);
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
     }
+
+    function _initializeGameArrays () {
+        availableSquares.length = 0;
+        moveSequence.length = 0;
+        for (i = 0; i < 9; i++) {
+            availableSquares.push(i);
+        }
+        console.log(`aS:${availableSquares}`);
+        console.log(`mS:${moveSequence}`);
+    }
+    _initializeGameArrays();
 
     return { availableSquares , moveSequence }
 })();
@@ -349,17 +357,12 @@ const gameManager = (function () {
 const compPlayer = (function () {
 
     function _tTBMove(moveRef) {
-        console.log(moveRef);
         if (gameManager.availableSquares.includes(moveRef)) {
             console.log(`${moveRef} - Available`);
         } else {
             console.log(`${moveRef} - Not Available`); 
         }
-
     }
-
-    // CODE ABOVE THIS COMMENT FOR TESTING AND DEBUGGING ONLY
-    // CONSOLE LOG STATEMENTS TO BE REMOVED
 
 
     function tacTicBot() {
