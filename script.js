@@ -471,7 +471,7 @@ const compPlayer = (function () {
         const cPMoveSequence = gameManager.moveSequence;
         console.log(`cPMS: ${cPMoveSequence}`);
         const cornerGS = [0,2,6,8];
-        const cruxGS = [1,3,5,8];
+        const cruxGS = [1,3,5,7];
         const availableCornerGS = cPAvailableSquares.filter(value => cornerGS.includes(value));
         const availableCruxGS = cPAvailableSquares.filter(value => cruxGS.includes(value));
         const tacTicBotMoves = [];
