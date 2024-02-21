@@ -229,7 +229,7 @@ const gameManager = (function () {
     });
     
 
-    const _gBListenerMove = function() {_makeMove(Number(this.id.charAt(2)))};
+    const _gBListenerMove = function() {makeMove(Number(this.id.charAt(2)))};
     
     const _gBListenerEnter = function() {
         const gSRef = Number(this.id.charAt(2))
@@ -259,14 +259,13 @@ const gameManager = (function () {
 
     //functions
 
-    function _makeMove (moveRef) {
+    function makeMove (moveRef) {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
             moveSequence.push(moveRef);
+            gameboard.updateBoard(moveRef,currentTurn);
             console.log(`aS:${availableSquares}`);
             console.log(`mS:${moveSequence}`);
-            gameboard.updateBoard(moveRef,currentTurn);
-
         } else {
             events.emit("publishMessage",`${currentPlayer}, that move is not available. Please try again!`); 
         }
@@ -299,6 +298,11 @@ const gameManager = (function () {
             currentTurn = "X";
         }
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
+        
+        if(currentPlayer == players.playerO) {
+            compPlayer.tacTicBot();
+        }
+
     }
 
     function _processResult(outcome) {
@@ -338,6 +342,10 @@ const gameManager = (function () {
         _manageGameBoardListeners("add");
         events.emit("resetBoard",["","","","","","","","",""]);
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
+
+        if(currentPlayer == players.playerO) {
+            compPlayer.tacTicBot();
+        }
     }
 
     function _initializeGameArrays () {
@@ -351,7 +359,7 @@ const gameManager = (function () {
     }
     _initializeGameArrays();
 
-    return { availableSquares , moveSequence }
+    return { availableSquares , moveSequence , makeMove }
 })();
 
 const compPlayer = (function () {
@@ -362,6 +370,11 @@ const compPlayer = (function () {
         } else {
             console.log(`${moveRef} - Not Available`); 
         }
+        
+        setTimeout(() => {
+            gameManager.makeMove(moveRef);;
+        }, 500);
+        
     }
 
 
