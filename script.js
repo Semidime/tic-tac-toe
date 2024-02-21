@@ -39,6 +39,7 @@ const players = (function () {
 
     newPlayerForm.addEventListener("submit", (event) => {
         event.preventDefault();
+        events.emit("newPlayerType",[newPlayerForm.elements["selectToken"].value,newPlayerForm.elements["selectHumanBot"].value,newPlayerForm.elements["assignBotDifficulty"].value])
         assignPlayer(playerName.value,newPlayerForm.elements["selectToken"].value);
         document.getElementById("newPlayerForm").reset();
         document.querySelector(".modal").close();
@@ -227,6 +228,7 @@ const gameManager = (function () {
     //subscriptions and event listeners
     events.on("checkWinCondition",_checkWinCondition);
     events.on("newPlayerAssigned",_resetGame);
+    events.on("newPlayerType",_updateBotSettings);
     
     document.querySelector('.new-game-button').addEventListener('click', function(){
         _resetGame("newRound")
@@ -407,6 +409,42 @@ const gameManager = (function () {
         console.log(`mS:${moveSequence}`);
     }
     _initializeGameArrays();
+
+    function _updateBotSettings (botSettingsArray) {
+            if (botSettingsArray[0] == "X") {
+                if (botSettingsArray[1] == "Human") {
+                    xBot = 0;
+                    xBotDifficulty = parseInt(botSettingsArray[2]);
+                    xBotDifficultySlider.value = parseInt(botSettingsArray[2]);
+                    if (xBotCheckbox.checked === true) {
+                        xBotCheckbox.checked = false;
+                    };
+                } else {
+                    xBot = 1;
+                    xBotDifficulty = parseInt(botSettingsArray[2]);
+                    xBotDifficultySlider.value = parseInt(botSettingsArray[2]);
+                    if (xBotCheckbox.checked === false) {
+                        xBotCheckbox.checked = true;
+                    };
+                }
+            } else {
+                if (botSettingsArray[1] == "Human") {
+                    oBot = 0;
+                    oBotDifficulty = parseInt(botSettingsArray[2]);
+                    oBotDifficultySlider.value = parseInt(botSettingsArray[2]);
+                    if (oBotCheckbox.checked === true) {
+                        oBotCheckbox.checked = false;
+                    };
+                } else {
+                    oBot = 1;
+                    oBotDifficulty = parseInt(botSettingsArray[2]);
+                    oBotDifficultySlider.value = parseInt(botSettingsArray[2]);
+                    if (oBotCheckbox.checked === false) {
+                        oBotCheckbox.checked = true;
+                    };
+                }
+            }
+    }
 
     return { availableSquares , moveSequence , makeMove }
 })();
