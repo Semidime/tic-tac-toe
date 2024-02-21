@@ -263,8 +263,8 @@ const gameManager = (function () {
         if (availableSquares.includes(moveRef)) {
             availableSquares.splice(availableSquares.indexOf(moveRef),1);
             moveSequence.push(moveRef);
-            console.log(availableSquares);
-            console.log(moveSequence);
+            console.log(`aS:${availableSquares}`);
+            console.log(`mS:${moveSequence}`);
             gameboard.updateBoard(moveRef,currentTurn);
 
         } else {
@@ -333,6 +333,8 @@ const gameManager = (function () {
         }
         availableSquares = [0,1,2,3,4,5,6,7,8];
         moveSequence = [];
+        console.log(`aS:${availableSquares}`);
+        console.log(`mS:${moveSequence}`);
         firstMove = currentTurn;
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         _manageGameBoardListeners("remove");
@@ -340,5 +342,208 @@ const gameManager = (function () {
         events.emit("resetBoard",["","","","","","","","",""]);
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
     }
+
+    return { availableSquares , moveSequence }
 })();
 
+const compPlayer = (function () {
+
+    function _tTBMove(moveRef) {
+        console.log(moveRef);
+        if (gameManager.availableSquares.includes(moveRef)) {
+            console.log(`${moveRef} - Available`);
+        } else {
+            console.log(`${moveRef} - Not Available`); 
+        }
+
+    }
+
+    // CODE ABOVE THIS COMMENT FOR TESTING AND DEBUGGING ONLY
+    // CONSOLE LOG STATEMENTS TO BE REMOVED
+
+
+    function tacTicBot() {
+        const cPAvailableSquares = gameManager.availableSquares;
+        console.log(`cPAS: ${cPAvailableSquares}`);
+        const cPMoveSequence = gameManager.moveSequence;
+        console.log(`cPMS: ${cPMoveSequence}`);
+        const cornerGS = [0,2,6,8];
+        const cruxGS = [1,3,5,8];
+        const availableCornerGS = cPAvailableSquares.filter(value => cornerGS.includes(value));
+        const availableCruxGS = cPAvailableSquares.filter(value => cruxGS.includes(value));
+        const tacTicBotMoves = [];
+        const opponentMoves = [];
+        const revMoveSequence = cPMoveSequence.reverse();
+        for (i = 0; i<revMoveSequence.length; i ++) {
+            if (i % 2 === 0) { // index is even
+                opponentMoves.push(revMoveSequence[i]);
+            } else {
+                tacTicBotMoves.push(revMoveSequence[i]);
+            }
+        } 
+        cPMoveSequence.reverse();
+
+        console.log(`tTB: ${tacTicBotMoves}`);
+        console.log(`Opp: ${opponentMoves}`);
+
+        // FIRST MOVE: 
+        //Always select middle or any corner 
+        if (cPMoveSequence.length == 0) {
+            console.log("AP01");
+            if ((Math.floor(Math.random()*5)) < 4) { 
+                _tTBMove(cornerGS[Math.floor(Math.random()*4)]);
+            } else {
+                _tTBMove(4);
+            }
+            return
+        } 
+
+        // SECOND MOVE:
+        // if P1 selected a corner, select middle or opposite corner;
+        if (cPMoveSequence.length == 1 && cornerGS.includes(cPMoveSequence[0])) {
+            console.log("AP02");
+            if (Math.floor(Math.random()*2)<1) {
+                _tTBMove(4);
+            } else if (cPMoveSequence[0] == 0) {
+                _tTBMove(8); 
+            } else if (cPMoveSequence[0] == 2) {
+                _tTBMove(6); 
+            } else if (cPMoveSequence[0] == 6) {
+                _tTBMove(2); 
+            } else if (cPMoveSequence[0] == 8) {
+                _tTBMove(0); 
+            }
+            return
+        }
+
+        // THIRD MOVE
+        // if first move was a corner, opponent did not select a Crux GS, select opposite corner if available; 
+        if (cPMoveSequence.length == 2  && cornerGS.includes(cPMoveSequence[0]) && !cruxGS.includes(cPMoveSequence[1])) {
+            console.log("AP03");
+            if (cPMoveSequence[0] == 0 && !cPMoveSequence.includes(8)) {
+                _tTBMove(8);
+            } else if (cPMoveSequence[0] == 2 && !cPMoveSequence.includes(6)) {
+                _tTBMove(6);
+            } else if (cPMoveSequence[0] == 6 && !cPMoveSequence.includes(2)) {
+                _tTBMove(2);
+            } else if (cPMoveSequence[0] == 8 && !cPMoveSequence.includes(0)) {
+                _tTBMove(0);
+            }
+            return
+        }
+
+        //FOURTH MOVE
+        //If first and third moves diagonal corners AND second move middle
+        // MUST select any Crux GS     
+        if (cPMoveSequence.length == 3
+            &&  (  (cPMoveSequence[0] == 0 && cPMoveSequence[1] == 4 && cPMoveSequence[2] == 8 )
+                || (cPMoveSequence[0] == 8 && cPMoveSequence[1] == 4 && cPMoveSequence[2] == 0 )
+                || (cPMoveSequence[0] == 2 && cPMoveSequence[1] == 4 && cPMoveSequence[2] == 6 )
+                || (cPMoveSequence[0] == 6 && cPMoveSequence[1] == 4 && cPMoveSequence[2] == 2 ))) {
+                    console.log("AP04");
+                    _tTBMove(cruxGS[Math.floor(Math.random()*4)]);
+                return
+            }; 
+
+        //ANY MOVE AFTER tTBot HAS ALREADY PLAYED TWO MOVES
+        // Is winning move available
+        if (tacTicBotMoves.length >= 2) {
+            console.log("AP05");
+            const checkWin = tacTicBotMoves.slice();
+            for (i = 0; i < cPAvailableSquares.length; i ++) {
+                checkWin.push(cPAvailableSquares[i]);
+                
+                if ((checkWin.includes(0) && checkWin.includes(1) && checkWin.includes(2))
+                || (checkWin.includes(3) && checkWin.includes(4) && checkWin.includes(5))
+                || (checkWin.includes(6) && checkWin.includes(7) && checkWin.includes(8))
+                || (checkWin.includes(0) && checkWin.includes(3) && checkWin.includes(6))
+                || (checkWin.includes(1) && checkWin.includes(4) && checkWin.includes(7))
+                || (checkWin.includes(2) && checkWin.includes(5) && checkWin.includes(8))
+                || (checkWin.includes(0) && checkWin.includes(4) && checkWin.includes(8))
+                || (checkWin.includes(2) && checkWin.includes(4) && checkWin.includes(6))
+                ) {
+                    _tTBMove(cPAvailableSquares[i]);
+                    return
+                }
+                checkWin.pop();
+            }
+        }
+
+        //ANY MOVE AFTER tTBot OPPONENT HAS ALREADY PLAYED TWO MOVES
+        //Is losing move a risk on next round
+        if (opponentMoves.length >= 2) {
+            console.log("AP06");
+            const checkLose = opponentMoves.slice();
+                for (i = 0; i < cPAvailableSquares.length; i ++) {
+                checkLose.push(cPAvailableSquares[i]);                 
+                    if ((checkLose.includes(0) && checkLose.includes(1) && checkLose.includes(2))
+                    || (checkLose.includes(3) && checkLose.includes(4) && checkLose.includes(5))
+                    || (checkLose.includes(6) && checkLose.includes(7) && checkLose.includes(8))
+                    || (checkLose.includes(0) && checkLose.includes(3) && checkLose.includes(6))
+                    || (checkLose.includes(1) && checkLose.includes(4) && checkLose.includes(7))
+                    || (checkLose.includes(2) && checkLose.includes(5) && checkLose.includes(8))
+                    || (checkLose.includes(0) && checkLose.includes(4) && checkLose.includes(8))
+                    || (checkLose.includes(2) && checkLose.includes(4) && checkLose.includes(6))
+                    ) {
+                        _tTBMove(cPAvailableSquares[i]);
+                        return
+                    }
+                    checkLose.pop();
+                }
+            }
+        //OTHERWISE DEFAULT BEHAVIOUR:
+
+        //Is middle still available
+        if (cPAvailableSquares.includes(4)) {
+            console.log("AP07");
+            _tTBMove(4);
+            return
+        }
+
+        //Is Corner available that is not adjacent to an opp move
+        if (availableCornerGS.length > 0 ) {
+            console.log("AP08");
+            if (availableCornerGS.includes(0) && !opponentMoves.includes(1) && !opponentMoves.includes(3) ) {
+                _tTBMove(0);
+                return
+            } else if (availableCornerGS.includes(2) && !opponentMoves.includes(1) && !opponentMoves.includes(5) ) {
+                _tTBMove(2);
+                return
+            } else if (availableCornerGS.includes(6) && !opponentMoves.includes(3) && !opponentMoves.includes(7) ) {
+                _tTBMove(6);
+                return
+            } else if (availableCornerGS.includes(8) && !opponentMoves.includes(5) && !opponentMoves.includes(7) ) {
+                _tTBMove(2);
+                return
+            }
+        }
+
+        //If tTB controls middle is there two vacat Crus GS opposite each other
+        if (tacTicBotMoves.includes(4) && availableCruxGS.length >= 2) {
+            console.log("AP09");
+            if (availableCruxGS.includes(1) && availableCruxGS.includes(7)) {
+                if ((Math.floor(Math.random()*2)) < 1) { 
+                    _tTBMove(1);
+                } else {
+                    _tTBMove(7);
+                }
+                return
+            } else if (availableCruxGS.includes(3) && availableCruxGS.includes(5)) {
+                if ((Math.floor(Math.random()*2)) < 1) { 
+                    _tTBMove(3);
+                } else {
+                    _tTBMove(5);
+                }
+                return
+            } 
+        }
+
+        // RNG
+        console.log("AP10");    
+        _tTBMove(cPAvailableSquares[(Math.floor(Math.random()*cPAvailableSquares.length))])
+        return
+    }
+
+    return { tacTicBot }
+
+})()
