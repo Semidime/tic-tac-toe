@@ -61,30 +61,51 @@
                         <dialog class="modal">
                             <button id="closeChangePlayerDialogButton">X</button>
                             <form action="https://httpbin.org/post" method="post" id="newPlayerForm">
-                                <h1>Add A New Player!</h1>
+                                <h1>Select A New Player!</h1>
                                 <div class="form-inputs">
-                                       <div class="input-group">
-                                            <div class="form-group">
-                                                <label for="playerName">Player Name:</label>
-                                                <input type="text" name="playerName" id="playerName" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <div>Select Player Token:</div>
-                                                <fieldset id="player-token-radio-group">
-                                                        <div class="radio-group">
-                                                            <label for="playX">X:&nbsp;</label>
-                                                            <input type="radio" name="selectToken" id="playX" value="X" required>
-                                                        </div>
-                                                        <div class="radio-group">
-                                                            <label for="playO">O:&nbsp;</label>
-                                                            <input type="radio" name="selectToken" id="playO" value="O">
-                                                        </div>
-                                                </fieldset>
-                                            </div>
-                                        </div>
+
+                                    <div class="form-group">
+                                        <label for="playerName">Player Name:</label>
+                                        <input type="text" name="playerName" id="playerName" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="form-input-title">Player Token:</div>
+                                        <fieldset id="player-token-radio-group">
+                                                <div class="radio-group">
+                                                    <label for="playX">X:&nbsp;</label>
+                                                    <input type="radio" name="selectToken" id="playX" value="X" required>
+                                                </div>
+                                                <div class="radio-group">
+                                                    <label for="playO">O:&nbsp;</label>
+                                                    <input type="radio" name="selectToken" id="playO" value="O">
+                                                </div>
+                                        </fieldset>
+                                    </div>
+                                
+
+                                    <div class="form-group">
+                                        <div class="form-input-title">Player Type:</div>
+                                        <fieldset id="player-token-radio-group">
+                                                <div class="radio-group">
+                                                    <label for="playHuman">Human:&nbsp;</label>
+                                                    <input type="radio" name="selectHumanBot" id="playHuman" value="Human" required>
+                                                </div>
+                                                <div class="radio-group">
+                                                    <label for="playBot">TacTicBot:&nbsp;</label>
+                                                    <input type="radio" name="selectHumanBot" id="playBot" value="Bot">
+                                                </div>
+                                        </fieldset>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="form-input-title">TacTicBot Difficulty</div>
+                                        <input type="range" id="assigBotDifficulty" name="assignBotDifficulty" min="1" max="3" value="2" />
+                                    </div>
+                                        
                                 </div>
                                 <div class="form-submit">
-                                    <button type="submit" class="submit-btn" id="submitBtn">Add Player</button>
+                                    <button type="submit" class="submit-btn" id="submitBtn">Select Player</button>
                                 </div>
                             </form>
                         </dialog>
