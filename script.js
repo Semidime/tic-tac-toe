@@ -532,7 +532,7 @@ const compPlayer = (function () {
                 _tTBMove(6);
                 return
             } else if (availableCornerGS.includes(8) && !opponentMoves.includes(5) && !opponentMoves.includes(7) ) {
-                _tTBMove(2);
+                _tTBMove(8);
                 return
             }
         }
