@@ -425,14 +425,17 @@ const compPlayer = (function () {
             console.log("AP03");
             if (cPMoveSequence[0] == 0 && !cPMoveSequence.includes(8)) {
                 _tTBMove(8);
+                return;
             } else if (cPMoveSequence[0] == 2 && !cPMoveSequence.includes(6)) {
                 _tTBMove(6);
+                return;
             } else if (cPMoveSequence[0] == 6 && !cPMoveSequence.includes(2)) {
                 _tTBMove(2);
+                return;
             } else if (cPMoveSequence[0] == 8 && !cPMoveSequence.includes(0)) {
                 _tTBMove(0);
+                return;
             }
-            return
         }
 
         //FOURTH MOVE
@@ -521,7 +524,7 @@ const compPlayer = (function () {
             }
         }
 
-        //If tTB controls middle is there two vacat Crus GS opposite each other
+        //If tTB controls middle are there two vacant Crux GS opposite each other
         if (tacTicBotMoves.includes(4) && availableCruxGS.length >= 2) {
             console.log("AP09");
             if (availableCruxGS.includes(1) && availableCruxGS.includes(7)) {
