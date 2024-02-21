@@ -376,7 +376,7 @@ tfoot tr:last-child td:last-child {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 10px;
+    padding: 40px 20px 20px 20px;
     border: 2px black solid;
     border-radius: 10px;
     background-color: rgb(245 245 245);
@@ -389,29 +389,34 @@ tfoot tr:last-child td:last-child {
     justify-content: space-evenly;
     flex-grow: 1;
     margin: 5px;
+    gap: 1.5rem;
     padding-top: 10px;
 }
 
-.input-group {
+/* .input-group {
     display: flex;
     flex-direction: row;
     gap: clamp(2vw, 5vw, 100px);
-}
+} */
 
 .form-group {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.5rem;
     font-size: 2rem;
 }
 
 .form-inputs input {
     padding: 0.5rem;
-    width: clamp(150px, 20vw, 400px);
+    width: 100%;
     height: 3rem;
     border: 2px solid #E5E7EB;
     border-radius: 5px;
+}
+
+label[for="playerName"] {
+    font-weight: bold;
 }
 
 .form-inputs fieldset {
@@ -420,7 +425,7 @@ tfoot tr:last-child td:last-child {
     padding-bottom: 0.5rem;
     width: clamp(150px, 20vw, 400px);
     border: none;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .form-inputs input[type=radio] {
@@ -428,6 +433,15 @@ tfoot tr:last-child td:last-child {
     height: 1.5rem;
     padding: 0px;
     margin: 0px;
+}
+
+.form-inputs input[type=range] {
+    width: 75%;
+}
+
+
+.form-input-title {
+    font-weight: bold;
 }
 
 
@@ -470,7 +484,7 @@ tfoot tr:last-child td:last-child {
     font-size: 1.5rem;
     font-weight: bold;
     width: 2rem;
-    right: 10px;
+    right: 5px;
     top: 5px;
     border: 2px black solid;
     border-radius: 5px;
