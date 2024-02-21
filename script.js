@@ -271,13 +271,13 @@ const gameManager = (function () {
     xBotCheckbox.oninput = function () {
         if (xBot == 0) { xBot = 1 } else {xBot = 0};
         if (currentPlayer == players.playerX && xBot == 1) {
-            compPlayer.tacTicBot();
+            compPlayer.tacTicBot(xBotDifficulty,currentTurn);
         }    
     };
     oBotCheckbox.oninput = function () {
         if (oBot == 0) {oBot = 1} else {oBot = 0};
         if (currentPlayer == players.playerO && oBot == 1) {
-            compPlayer.tacTicBot();
+            compPlayer.tacTicBot(oBotDifficulty,currentTurn);
         }
     };
     xBotDifficultySlider.oninput = function () {
@@ -346,9 +346,9 @@ const gameManager = (function () {
         currentPlayer = currentTurn === "X" ? players.playerX : players.playerO;
         
         if (currentPlayer == players.playerX && xBot == 1) {
-            compPlayer.tacTicBot();
+            compPlayer.tacTicBot(xBotDifficulty,currentTurn);
         } else if (currentPlayer == players.playerO && oBot == 1) {
-            compPlayer.tacTicBot();
+            compPlayer.tacTicBot(oBotDifficulty,currentTurn);
         }
     }
 
@@ -391,9 +391,9 @@ const gameManager = (function () {
         events.emit("publishMessage",`New Game. ${currentPlayer} to play.`);
 
         if (currentPlayer == players.playerX && xBot == 1) {
-            compPlayer.tacTicBot();
+            compPlayer.tacTicBot(xBotDifficulty,currentTurn);
         } else if (currentPlayer == players.playerO && oBot == 1) {
-            compPlayer.tacTicBot();
+            compPlayer.tacTicBot(oBotDifficulty,currentTurn);
         }
     }
 
@@ -427,7 +427,7 @@ const compPlayer = (function () {
     }
 
 
-    function tacTicBot() {
+    function tacTicBot(difficulty,token) {
         const cPAvailableSquares = gameManager.availableSquares;
         console.log(`cPAS: ${cPAvailableSquares}`);
         const cPMoveSequence = gameManager.moveSequence;
@@ -450,7 +450,17 @@ const compPlayer = (function () {
 
         console.log(`tTB: ${tacTicBotMoves}`);
         console.log(`Opp: ${opponentMoves}`);
+        console.log(difficulty,token);
 
+        //DIFFICULTY INPUT
+        // 3 difficulty settings.  EASY (RNG 50%); NORMAL (RNG 25%); HARD (RNG 0%).
+        if ((Math.floor(Math.random()*4)) > difficulty) { 
+            console.log("AP00");
+            _tTBMove(cPAvailableSquares[(Math.floor(Math.random()*cPAvailableSquares.length))]);
+            return;
+        }
+        
+        
         // FIRST MOVE: 
         //Always select middle or any corner 
         if (cPMoveSequence.length == 0) {
@@ -608,7 +618,7 @@ const compPlayer = (function () {
 
         // RNG
         console.log("AP10");    
-        _tTBMove(cPAvailableSquares[(Math.floor(Math.random()*cPAvailableSquares.length))])
+        _tTBMove(cPAvailableSquares[(Math.floor(Math.random()*cPAvailableSquares.length))]);
         return
     }
 
