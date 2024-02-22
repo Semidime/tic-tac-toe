@@ -87,7 +87,7 @@
 
 .score-X,
 .score-Y {
-    width: clamp(350px, 25vw, 500px);
+    width: clamp(250px, 25vw, 500px);
     height: clamp(175px, 15vh, 300px);
     flex-shrink: 0;
     display: flex;
@@ -151,8 +151,8 @@ label[for="xBotCheckbox"] {
 }
 
 .gameboard {
-    height: 60vh;
-    width: min(100%,80vw);
+    height: max(60vh, 100%);
+    width: min(100%,90vw);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
