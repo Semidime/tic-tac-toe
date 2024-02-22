@@ -12,19 +12,16 @@
         <div class="header-section"> 
             <div class="logo">
                 <img src="images/WIP02.3_white.svg" alt="White Gull logo - white silhouette of a seagull in flight"  class="logo-img" >
-                <!-- <div class="logo-text">
-                    <h2>White&nbsp;Gull</h2>
-                </div> -->
             </div>
             <div class="header-title">
-                <div class="tiki-title">"I hate tiki-taka. I always will. I want nothing more to do with tiki-taka. Tiki-taka is a load of shit!" <span class="tiki-fraud">&nbsp;(B. Fraud, Esq.)</span></div>
+                <div class="tiki-title">"I hate tiki-taka. I always will ... Tiki-taka is a load of shit!" <span class="tiki-fraud">&nbsp;(B. Fraud, Esq.)</span></div>
                 
                 
             </div>
         </div>
-        <div class="game-container">
-            <div class="scoreboard-container">
-                <div class="scoreboard">
+        <div class="main-section">
+            <div class="game-container">
+                <div class="scoreboard-container">
                     <div class="score-X">
                         <div class="player-name">Xenophon (X)</div>
                         <div class="player-score">0</div>
@@ -50,10 +47,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="message-bar">
-                    <div class="message-title">MESSAGES:</div>
-                    <div class="message-body"></div>
-                </div>    
+                <div class="gameboard-container">
+                    <div class="gameboard">
+                        <div class="game-square" id="GS0"></div>
+                        <div class="game-square" id="GS1"></div>
+                        <div class="game-square" id="GS2"></div>
+                        <div class="game-square" id="GS3"></div>
+                        <div class="game-square" id="GS4"></div>
+                        <div class="game-square" id="GS5"></div>
+                        <div class="game-square" id="GS6"></div>
+                        <div class="game-square" id="GS7"></div>
+                        <div class="game-square" id="GS8"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-container"> 
                 <div class="button-container"> 
                     <button class="new-game-button"><span>New Game</span></button>
 
@@ -82,8 +90,6 @@
                                                 </div>
                                         </fieldset>
                                     </div>
-                                
-
                                     <div class="form-group">
                                         <div class="form-input-title">Player Type:</div>
                                         <fieldset id="player-token-radio-group">
@@ -113,21 +119,10 @@
                     </div>
 
                 </div>
-            </div>
-            <div class="gameboard-container"> 
-                <div class="gameboard">
-                    <div class="game-square" id="GS0"></div>
-                    <div class="game-square" id="GS1"></div>
-                    <div class="game-square" id="GS2"></div>
-                    <div class="game-square" id="GS3"></div>
-                    <div class="game-square" id="GS4"></div>
-                    <div class="game-square" id="GS5"></div>
-                    <div class="game-square" id="GS6"></div>
-                    <div class="game-square" id="GS7"></div>
-                    <div class="game-square" id="GS8"></div>
-                </div>
-            </div>
-            <div class="leaderboard-container">
+                <div class="message-bar">
+                    <div class="message-title">MESSAGES:</div>
+                    <div class="message-body"></div>
+                </div>               
                 <table id="leaderboardTable">
                     <colgroup>
                         <col style="width:25px;">
