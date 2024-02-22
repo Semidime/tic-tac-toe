@@ -141,18 +141,19 @@ label[for="xBotCheckbox"] {
 }
 
 .gameboard-container {
-    height: 90%;
-    width: 90%;
+    height: 100%;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
     align-items: center;
     background-color: rgb(230 230 230);
+
 }
 
 .gameboard {
-    height: max(60vh, 100%);
-    width: min(100%,90vw);
+    height: max(60vh, 95%);
+    width: 95%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
