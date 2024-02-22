@@ -31,6 +31,7 @@
     height: 100%;
     align-items: center;
     justify-items: center;
+    padding: 20px 0 20px 0;
 }
 
 
@@ -161,7 +162,7 @@ label[for="xBotCheckbox"] {
 }
 
 .gameboard {
-    height: min(60vh, 60vw);
+    height: 60vh;
     width: min(60vh, 60vw);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
