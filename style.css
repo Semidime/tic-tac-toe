@@ -163,7 +163,7 @@ label[for="xBotCheckbox"] {
 
 .gameboard {
     height: 60vh;
-    width: min(60vh, 60vw);
+    width: 60vh;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
